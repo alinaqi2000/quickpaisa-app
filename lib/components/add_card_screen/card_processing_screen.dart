@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quickpaisa/database/cards_storage.dart';
+import 'package:quickpaisa/resources/colors.dart';
 
 class CardProcessingScreen extends StatefulWidget {
   const CardProcessingScreen({Key? key, required this.cardDetails})
@@ -59,6 +60,7 @@ class _CardProcessingScreenState extends State<CardProcessingScreen>
         setState(() {
           processStatusAnimation = Container(
               color: Colors.transparent,
+              margin: EdgeInsets.only(bottom: 60),
               width: 300,
               child: Lottie.network(
                   'https://assets2.lottiefiles.com/packages/lf20_uub9r8ta.json',
@@ -73,9 +75,9 @@ class _CardProcessingScreenState extends State<CardProcessingScreen>
               height: 48,
               key: ValueKey(1),
               child: Text(
-                'card was added',
-                style:
-                    GoogleFonts.poppins(fontSize: 16, color: Color(0xff343a40)),
+                'card was added'.toUpperCase(),
+                style: GoogleFonts.poppins(
+                    fontSize: 16, color: Colors.greenAccent),
                 textAlign: TextAlign.center,
               ));
           title = "Successful!";
@@ -86,6 +88,7 @@ class _CardProcessingScreenState extends State<CardProcessingScreen>
         setState(() {
           processStatusAnimation = Container(
               color: Colors.transparent,
+              margin: EdgeInsets.only(bottom: 60),
               width: 136,
               child: Lottie.network(
                   'https://assets3.lottiefiles.com/packages/lf20_tl52xzvn.json',
@@ -100,9 +103,9 @@ class _CardProcessingScreenState extends State<CardProcessingScreen>
               height: 48,
               key: ValueKey(1),
               child: Text(
-                cardErrorMessage,
+                cardErrorMessage.toUpperCase(),
                 style:
-                    GoogleFonts.poppins(fontSize: 16, color: Color(0xff343a40)),
+                    GoogleFonts.poppins(fontSize: 16, color: Colors.redAccent),
                 textAlign: TextAlign.center,
               ));
           title = "Failed";
@@ -230,7 +233,7 @@ class _CardProcessingScreenState extends State<CardProcessingScreen>
       },
       child: Scaffold(
         // backgroundColor: Colors.white,
-        backgroundColor: Color(0xfffcfcfc),
+        backgroundColor: Color(AppColors.primaryBackground),
         appBar: AppBar(
           title: Text(
             title,
@@ -239,7 +242,7 @@ class _CardProcessingScreenState extends State<CardProcessingScreen>
           centerTitle: true,
           backgroundColor: Colors.transparent,
           elevation: 0,
-          foregroundColor: Color(0xff243656),
+          foregroundColor: Color(AppColors.secondaryText),
           leading: IconButton(
               onPressed: goBackToWalletScreen, icon: Icon(Icons.arrow_back)),
         ),

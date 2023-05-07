@@ -6,6 +6,7 @@ import 'package:quickpaisa/providers/live_transactions_provider.dart';
 
 import 'package:provider/provider.dart';
 import 'package:quickpaisa/qp_components.dart';
+import 'package:quickpaisa/resources/colors.dart';
 
 class TransactionReceiptScreen extends StatelessWidget {
   final Map<String, dynamic> transactionReceipt;
@@ -26,15 +27,19 @@ class TransactionReceiptScreen extends StatelessWidget {
 // double screenWidth=360;
 
     TextStyle _receiptHeaders = GoogleFonts.lato(
-        color: Color(0xff929bab), fontSize: screenWidth < 380 ? 14 : 16);
+        color: Color(AppColors.secondaryColorDim),
+        fontSize: screenWidth < 380 ? 12 : 14);
     TextStyle _receiptValues = GoogleFonts.chivo(
-        fontSize: screenWidth < 380 ? 15 : 19,
-        color: Color(0xff343a40),
+        fontSize: screenWidth < 380 ? 14 : 16,
+        color: Color(AppColors.secondaryText),
         fontWeight: FontWeight.bold);
-
+    final _imageURL = transactionReceipt['transactionMemberAvatar']
+            .toString()
+            .contains("http")
+        ? "${transactionReceipt['transactionMemberAvatar']}"
+        : "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${transactionReceipt['transactionMemberAvatar']}";
     Widget transactionMemberImage = FutureBuilder<int>(
-      future: checkUrlValidity(
-          "${ApiConstants.baseUrl}/dist/images/hadwin_images/brands_and_businesses/${transactionReceipt['transactionMemberAvatar']}"),
+      future: checkUrlValidity(_imageURL),
       builder: (context, snapshot) {
         if (transactionReceipt
                 .containsKey('transactionMemberBusinessWebsite') &&
@@ -44,7 +49,7 @@ class TransactionReceiptScreen extends StatelessWidget {
               aspectRatio: 1.0 / 1.0,
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  Color(0xff243656),
+                  Color(0xff243644),
                   BlendMode.color,
                 ),
                 child: ColorFiltered(
@@ -53,9 +58,13 @@ class TransactionReceiptScreen extends StatelessWidget {
                     BlendMode.saturation,
                   ),
                   child: Image.network(
-                    "${ApiConstants.baseUrl}/dist/images/hadwin_images/brands_and_businesses/${transactionReceipt['transactionMemberAvatar']}",
-                    height: 56,
-                    width: 56,
+                    transactionReceipt['transactionMemberAvatar']
+                            .toString()
+                            .contains("http")
+                        ? "${transactionReceipt['transactionMemberAvatar']}"
+                        : "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${transactionReceipt['transactionMemberAvatar']}",
+                    height: 44,
+                    width: 44,
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -70,9 +79,9 @@ class TransactionReceiptScreen extends StatelessWidget {
               child: AspectRatio(
                 aspectRatio: 1.0 / 1.0,
                 child: Image.network(
-                  "${ApiConstants.baseUrl}/dist/images/hadwin_images/hadwin_users/${transactionReceipt['transactionMemberGender'].toLowerCase()}/${transactionReceipt['transactionMemberAvatar']}",
-                  height: 56,
-                  width: 56,
+                  "${ApiConstants.baseUrl}../storage/images/hadwin_images/hadwin_users/${transactionReceipt['transactionMemberGender'].toLowerCase()}/${transactionReceipt['transactionMemberAvatar']}",
+                  height: 44,
+                  width: 44,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -82,9 +91,13 @@ class TransactionReceiptScreen extends StatelessWidget {
               child: AspectRatio(
                 aspectRatio: 1.0 / 1.0,
                 child: Image.network(
-                  "${ApiConstants.baseUrl}/dist/images/hadwin_images/brands_and_businesses/${transactionReceipt['transactionMemberAvatar']}",
-                  height: 56,
-                  width: 56,
+                  transactionReceipt['transactionMemberAvatar']
+                          .toString()
+                          .contains("http")
+                      ? "${transactionReceipt['transactionMemberAvatar']}"
+                      : "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${transactionReceipt['transactionMemberAvatar']}",
+                  height: 44,
+                  width: 44,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -95,7 +108,7 @@ class TransactionReceiptScreen extends StatelessWidget {
             transactionReceipt['transactionMemberName'][0].toUpperCase(),
             style: GoogleFonts.heebo(
               fontSize: 18,
-              color: Color(0xff243656),
+              color: Color(AppColors.secondaryColorDim),
             ),
           );
         }
@@ -103,19 +116,20 @@ class TransactionReceiptScreen extends StatelessWidget {
     );
 
     return Scaffold(
-        backgroundColor: Colors.blueGrey.shade300,
+        backgroundColor: Color(AppColors.primaryBackground),
         body: SingleChildScrollView(
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: RadialGradient(
-                  colors: [Color(0xff495057), Colors.blueGrey.shade300],
-                  radius: 0.625),
+              gradient: RadialGradient(colors: [
+                Color(AppColors.primaryBackground),
+                Color(AppColors.primaryBackground)
+              ], radius: 0.625),
             ),
             child: Column(
               children: [
                 SizedBox(
-                  height: 72,
+                  height: 90,
                 ),
                 Stack(
                   alignment: Alignment.center,
@@ -129,7 +143,7 @@ class TransactionReceiptScreen extends StatelessWidget {
                         width: screenWidth - 72,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(7),
-                          color: Colors.white,
+                          color: Color(AppColors.secondaryBackground),
                         ),
                       ),
                     ),
@@ -137,8 +151,8 @@ class TransactionReceiptScreen extends StatelessWidget {
                     Positioned(
                         top: -36,
                         child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 39,
+                          backgroundColor: Color(AppColors.primaryBackground),
+                          radius: 44,
                           child: CircleAvatar(
                             child: Image.asset(
                               'assets/images/checkmark.png',
@@ -154,7 +168,7 @@ class TransactionReceiptScreen extends StatelessWidget {
                         lineLength: screenWidth - 120,
                         lineThickness: 2.4,
                         dashLength: 12,
-                        dashColor: Colors.grey.shade500,
+                        dashColor: Color(AppColors.primaryBackground),
                         dashRadius: 0.0,
                         dashGapLength: 3.0,
                         dashGapColor: Colors.transparent,
@@ -172,20 +186,18 @@ class TransactionReceiptScreen extends StatelessWidget {
                           children: [
                             Text(
                                 transactionReceipt['transactionType'] == 'debit'
-                                    ? 'Congratulations!'
-                                    : "Surprise!",
+                                    ? 'Money Sent!'
+                                    : "Money Received!",
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.heebo(
                                     fontSize: 24,
-                                    color: Color(0xff343a40),
+                                    color: Color(AppColors.primaryColor),
                                     fontWeight: FontWeight.bold)),
                             Text(
-                              transactionReceipt['transactionType'] == 'debit'
-                                  ? 'your transaction was successful'
-                                  : 'apparently someone still cares\nabout you',
+                              'Your transaction was successful',
                               textAlign: TextAlign.center,
                               style: GoogleFonts.sarabun(
-                                color: Color(0xff929bab),
+                                color: Color(AppColors.secondaryText),
                               ),
                             )
                           ],
@@ -300,7 +312,8 @@ class TransactionReceiptScreen extends StatelessWidget {
                                                           'transactionMemberEmail']
                                                       : 'contact details unavailable',
                                               style: GoogleFonts.sarabun(
-                                                  color: Color(0xff929bab),
+                                                  color: Color(
+                                                      AppColors.secondaryText),
                                                   fontSize: 12),
                                             ))
                                       ],
@@ -313,7 +326,8 @@ class TransactionReceiptScreen extends StatelessWidget {
                                       children: [
                                         CircleAvatar(
                                             radius: 30,
-                                            backgroundColor: Color(0xffF5F7FA),
+                                            backgroundColor:
+                                                Color(AppColors.shadowColor),
                                             child: transactionMemberImage),
                                       ],
                                     ),
@@ -337,10 +351,14 @@ class TransactionReceiptScreen extends StatelessWidget {
                                       children: [
                                         Text('AMOUNT', style: _receiptHeaders),
                                         Text(
-                                          '\$ ${transactionReceipt['transactionAmount']}',
+                                          'Rs. ${transactionReceipt['transactionAmount']}',
                                           style: GoogleFonts.oswald(
-                                              fontSize: 32,
-                                              color: Color(0xff343a40),
+                                              fontSize: 24,
+                                              color: transactionReceipt[
+                                                          'transactionType'] ==
+                                                      'debit'
+                                                  ? Colors.redAccent
+                                                  : Colors.greenAccent,
                                               fontWeight: FontWeight.w600),
                                         ),
                                       ],
@@ -355,13 +373,13 @@ class TransactionReceiptScreen extends StatelessWidget {
                                           padding: EdgeInsets.all(7.2),
                                           decoration: BoxDecoration(
                                               border: Border.all(
-                                                  color: Color(0xff76c893)),
+                                                  color: Colors.greenAccent),
                                               borderRadius:
                                                   BorderRadius.circular(6.18)),
                                           child: Text(
                                             'COMPLETED',
                                             style: GoogleFonts.quicksand(
-                                                color: Color(0xff76c893),
+                                                color: Colors.greenAccent,
                                                 fontSize: 12.84),
                                           ),
                                         )
@@ -379,7 +397,8 @@ class TransactionReceiptScreen extends StatelessWidget {
                             height: 100,
                             width: screenWidth - 96,
                             decoration: BoxDecoration(
-                                color: Color(0xffbde0fe).withOpacity(0.618),
+                                color: Color(AppColors.shadowColor)
+                                    .withOpacity(0.618),
                                 borderRadius: BorderRadius.circular(7)),
                             // child: Padding(
                             padding: const EdgeInsets.all(6.0),
@@ -440,7 +459,7 @@ class TransactionReceiptScreen extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(left: 8.4),
             child: Image.network(
-              "${ApiConstants.baseUrl}/dist/images/hadwin_images/quickpaisa_payment_system/square_card_brands/${cardUsedInTransaction['cardBrand'].replaceAll(' ', '-').toLowerCase()}.png",
+              "${ApiConstants.baseUrl}../storage/images/hadwin_images/hadwin_payment_system/square_card_brands/${cardUsedInTransaction['cardBrand'].replaceAll(' ', '-').toLowerCase()}.png",
               height: 72,
               width: 72,
             ),
@@ -455,14 +474,14 @@ class TransactionReceiptScreen extends StatelessWidget {
                   'Credit/Debit Card',
                   style: GoogleFonts.roboto(
                       fontSize: screenWidth < 400 ? 16 : 18,
-                      color: Color(0xff343a40),
+                      color: Color(AppColors.secondaryColorDim),
                       fontWeight: FontWeight.bold),
                 ),
                 Text(
                   "${_formatCardBrandName(cardUsedInTransaction['cardBrand'])} ending ${_formatCardNumber(cardUsedInTransaction['cardNumber'])}",
                   style: GoogleFonts.heebo(
                       fontSize: screenWidth < 400 ? 11 : 13,
-                      color: Color(0xff929bab)),
+                      color: Color(AppColors.secondaryText)),
                 )
               ],
             ),

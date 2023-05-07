@@ -116,7 +116,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'quickpaisa',
+        title: 'QuickPaisa',
         theme: ThemeData(
             scaffoldBackgroundColor: Color(AppColors.primaryBackground),
             splashColor: Color(AppColors.primaryBackground),
@@ -151,10 +151,11 @@ class _MyAppState extends State<MyApp> {
         themeMode: ThemeMode.dark,
         home: Builder(
           builder: (context) {
-            if (_previousllyInstalled == false) {
-              FlutterNativeSplash.remove();
-              return OnboardingScreen();
-            } else if (_isLoggedIn == true && _loggedInUserData != null) {
+            // if (_previousllyInstalled == false) {
+            //   FlutterNativeSplash.remove();
+            //   return OnboardingScreen();
+            // } else
+            if (_isLoggedIn == true && _loggedInUserData != null) {
               FlutterNativeSplash.remove();
               return TabbedLayoutComponent(
                 userData: _loggedInUserData!,

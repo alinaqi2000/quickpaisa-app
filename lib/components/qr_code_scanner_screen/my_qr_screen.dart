@@ -34,15 +34,23 @@ class MyQRCodeScreen extends StatelessWidget {
               height: 36,
             ),
             Text(
-              "Share this code",
-              style: GoogleFonts.poppins(fontSize: 18),
+              "Share this code to receicve payments",
+              style: GoogleFonts.poppins(fontSize: 14),
               textAlign: TextAlign.center,
             ),
-            Text(
-              "( quickpaisa is a prototype \nyou cannot send\nor receive real money )",
-              style: GoogleFonts.poppins(fontSize: 15),
-              textAlign: TextAlign.center,
-            ),
+            RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(children: <TextSpan>[
+                  TextSpan(text: '( '),
+                  TextSpan(
+                      text: 'QuickPaisa',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(AppColors.primaryColor))),
+                  TextSpan(
+                      text:
+                          ' is a prototype, \nyou cannot send or\nreceive real money )'),
+                ])),
             SizedBox(
               height: 64,
             ),
@@ -81,8 +89,6 @@ class MyQRCodeScreen extends StatelessWidget {
                             'walletAddress': userData['walletAddress'],
                             'emailAddress': userData['email'],
                             'phoneNumber': userData['phone_number'],
-                            'communicationAddress':
-                                "${userData['address']['street_name']}, ${userData['address']['street_address']}, ${userData['address']['city']}, ${userData['address']['state']} ${userData['address']['zip_code']}, ${userData['address']['country']}"
                           };
                           return QrImage(
                             data: json.encode(qrFields),

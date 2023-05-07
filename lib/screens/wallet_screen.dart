@@ -54,7 +54,7 @@ class _WalletScreenState extends State<WalletScreen> {
             // top: 128,
             bottom: -60,
             child: CircleAvatar(
-              backgroundColor: Colors.white,
+              backgroundColor: Color(AppColors.secondaryBackground),
               radius: 64,
               child: ClipOval(
                 child: Image.network(
@@ -351,30 +351,25 @@ class _WalletScreenState extends State<WalletScreen> {
 
   void _deleteCardDialogBox(String cardNumber) {
     Decoration buttonDecoration = BoxDecoration(
-      boxShadow: [
-        BoxShadow(
-            color: Colors.blueGrey.shade100,
-            offset: Offset(0, 4),
-            blurRadius: 5.0)
-      ],
-      gradient: RadialGradient(
-          colors: [Color(0xff0070BA), Color(AppColors.primaryColorDim)],
-          radius: 8.4,
-          center: Alignment(-0.24, -0.36)),
       borderRadius: BorderRadius.circular(10),
     );
-    ButtonStyle buttonStyle = ElevatedButton.styleFrom(
-      primary: Colors.transparent,
-      shadowColor: Colors.transparent,
+    ButtonStyle successButtonStyle = ElevatedButton.styleFrom(
+      primary: Color(AppColors.secondaryColorDim),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    );
+    ButtonStyle delButtonStyle = ElevatedButton.styleFrom(
+      primary: Colors.redAccent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     );
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) => AlertDialog(
+              backgroundColor: Color(AppColors.secondaryBackground),
               title: Text(
                 "Delete Card?",
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Color(AppColors.secondaryColorDim)),
               ),
               content: Text(
                 "Are you sure, you want to delete Card with number\n${_formatCardNumber(cardNumber, encrypt: false)}?",
@@ -397,7 +392,7 @@ class _WalletScreenState extends State<WalletScreen> {
                           child: ElevatedButton(
                               onPressed: () => _deleteSelectedCard(cardNumber),
                               child: Text('Delete'),
-                              style: buttonStyle),
+                              style: delButtonStyle),
                         ),
                         SizedBox(
                           width: 24,
@@ -411,7 +406,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                 Navigator.of(context).pop();
                               },
                               child: Text('Cancel'),
-                              style: buttonStyle),
+                              style: successButtonStyle),
                         ),
                       ],
                     ),

@@ -41,7 +41,6 @@ dependencies:
   lottie: ^1.2.2
   socket_io_client: ^1.0.2
   grouped_list: ^4.2.0
-  # concentric_transition: ^1.0.1+1
   concentric_transition: 1.0.1
   dotted_line: ^3.1.0
   qr_flutter: ^4.0.0
@@ -74,7 +73,7 @@ flutter_icons:
   flutter_lints: ^1.0.4
   
 flutter_native_splash:
-  color: "#2f73b9"
+  color: "#000000"
   image: "assets/images/quickpaisa_system/quickpaisa-splash-screen-logo.png"
   android: true
   ios: true

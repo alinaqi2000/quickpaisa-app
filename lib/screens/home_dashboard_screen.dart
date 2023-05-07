@@ -4,6 +4,8 @@ import 'package:quickpaisa/qp_components.dart';
 
 import 'package:provider/provider.dart';
 import 'package:quickpaisa/resources/colors.dart';
+import 'package:quickpaisa/screens/all_contacts.dart';
+import 'package:quickpaisa/screens/all_transaction_activities_screen.dart';
 
 class HomeDashboardScreen extends StatefulWidget {
   final Map<String, dynamic> user;
@@ -39,11 +41,11 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 6),
           child: CircleAvatar(
-            backgroundColor: Colors.white,
+            backgroundColor: Color(AppColors.secondaryBackground),
             radius: 26,
             child: ClipOval(
               child: Image.network(
-                // "${ApiConstants.baseUrl}/dist/images/hadwin_images/hadwin_users/male/${widget.user['avatar']}",
+                // "${ApiConstants.baseUrl}../storage/images/hadwin_images/hadwin_users/male/${widget.user['avatar']}",
                 "${widget.user['avatar']}",
                 height: 48,
                 width: 48,
@@ -98,9 +100,9 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
                 height: 20,
               ),
               Text(
-                "\$ ${context.watch<UserLoginStateProvider>().bankBalance}",
+                "Rs. ${context.watch<UserLoginStateProvider>().bankBalance}",
                 style: TextStyle(
-                    color: Colors.white.withOpacity(0.96),
+                    color: Colors.white.withOpacity(0.90),
                     fontSize: 36,
                     fontWeight: FontWeight.bold),
               ),
@@ -141,7 +143,7 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
                 ),
                 Spacer(),
                 Text(
-                  "QR Payment",
+                  "My QR Code",
                   style: TextStyle(fontSize: 13),
                 ),
                 SizedBox(
@@ -153,7 +155,7 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
               // primary: Color(AppColors.secondaryColor),
               primary: Color(AppColors.primaryColorDim),
               // fixedSize: Size(90, 100),
-              fixedSize: Size(96, 108),
+              fixedSize: Size(90, 90),
               shadowColor: Color(AppColors.secondaryColor).withOpacity(0.618),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
@@ -162,7 +164,7 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
       Padding(
         padding: EdgeInsets.all(10),
         child: ElevatedButton(
-            onPressed: () => _makeATransaction('credit'),
+            onPressed: () => _makeATransaction('debit'),
             child: Column(children: [
               SizedBox(
                 height: 10,
@@ -170,13 +172,13 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
               Align(
                   alignment: Alignment.topLeft,
                   child: Icon(
-                    Icons.money_sharp,
+                    Icons.send_rounded,
                     size: 24,
                     color: Color(AppColors.secondaryColor),
                   )),
               Spacer(),
               Text(
-                "Add Money",
+                "Send Money",
                 style: TextStyle(
                     color: Color(AppColors.secondaryText), fontSize: 13),
               ),
@@ -187,7 +189,7 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
             style: ElevatedButton.styleFrom(
               // fixedSize: Size(90, 100),
               backgroundColor: Color(AppColors.secondaryBackground),
-              fixedSize: Size(96, 108),
+              fixedSize: Size(90, 90),
               shadowColor: Color(AppColors.shadowColor).withOpacity(0.618),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
@@ -204,13 +206,13 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
               Align(
                   alignment: Alignment.topLeft,
                   child: Icon(
-                    Icons.redeem,
+                    Icons.receipt,
                     size: 24,
                     color: Color(AppColors.secondaryColor),
                   )),
               Spacer(),
               Text(
-                "Redeem Money",
+                "Request Money",
                 style: TextStyle(
                     color: Color(AppColors.secondaryText), fontSize: 13),
               ),
@@ -221,39 +223,81 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
             style: ElevatedButton.styleFrom(
               // fixedSize: Size(90, 100),
               backgroundColor: Color(AppColors.secondaryBackground),
-              fixedSize: Size(96, 108),
+              fixedSize: Size(90, 90),
               shadowColor: Color(AppColors.shadowColor).withOpacity(0.618),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             )),
       ),
-      // PopupMenuButton<_ScanOptions>(
-      //   icon: Icon(
-      //     FluentIcons.more_vertical_28_regular,
-      //     color: Colors.grey,
-      //   ),
-      //   offset: Offset(119, -27),
-      //   onSelected: (value) {
-      //     if (value == _ScanOptions.ScanQRCode) {
-      //       Navigator.push(
-      //               context, SlideRightRoute(page: QRCodeScannerScreen()))
-      //           .whenComplete(() => setState(() {}));
-      //     } else {
-      //       Navigator.push(context, SlideRightRoute(page: MyQRCodeScreen()))
-      //           .whenComplete(() => setState(() {}));
-      //     }
-      //   },
-      //   itemBuilder: (context) => [
-      //     PopupMenuItem(
-      //       child: Text("Scan QR Code"),
-      //       value: _ScanOptions.ScanQRCode,
-      //     ),
-      //     PopupMenuItem(
-      //       child: Text("My QR Code"),
-      //       value: _ScanOptions.MyQRCode,
-      //     )
-      //   ],
-      // )
+      // Padding(
+      //   padding: EdgeInsets.all(10),
+      //   child: ElevatedButton(
+      //       onPressed: () => {
+      //             Navigator.push(
+      //                     context, SlideRightRoute(page: MyQRCodeScreen()))
+      //                 .whenComplete(() => setState(() {}))
+      //           },
+      //       child: Column(children: [
+      //         SizedBox(
+      //           height: 10,
+      //         ),
+      //         Align(
+      //             alignment: Alignment.topLeft,
+      //             child: Icon(
+      //               Icons.contacts_outlined,
+      //               size: 24,
+      //               color: Color(AppColors.secondaryColor),
+      //             )),
+      //         Spacer(),
+      //         Text(
+      //           "My Contacts",
+      //           style: TextStyle(
+      //               color: Color(AppColors.secondaryText), fontSize: 13),
+      //         ),
+      //         SizedBox(
+      //           height: 10,
+      //         )
+      //       ]),
+      //       style: ElevatedButton.styleFrom(
+      //         // fixedSize: Size(90, 100),
+      //         backgroundColor: Color(AppColors.secondaryBackground),
+      //         fixedSize: Size(90, 90),
+      //         shadowColor: Color(AppColors.shadowColor).withOpacity(0.618),
+      //         shape: RoundedRectangleBorder(
+      //             borderRadius: BorderRadius.circular(12)),
+      //       )),
+      // ),
+      PopupMenuButton<_ScanOptions>(
+        icon: Icon(
+          FluentIcons.more_vertical_28_regular,
+          color: Color(AppColors.secondaryText),
+        ),
+        offset: Offset(119, -27),
+        onSelected: (value) {
+          if (value == _ScanOptions.MyContacts) {
+            Navigator.push(
+                    context,
+                    SlideRightRoute(
+                        page: AllContactsScreen(
+                            userAuthKey: widget.userAuthKey ?? "")))
+                .whenComplete(() => setState(() {}));
+          }
+          // else {
+          //   Navigator.push(context, SlideRightRoute(page: MyQRCodeScreen()))
+          //       .whenComplete(() => setState(() {}));
+          // }
+        },
+        itemBuilder: (context) => [
+          PopupMenuItem(
+            child: Text("My Contacts"),
+            value: _ScanOptions.MyContacts,
+          ),
+          // PopupMenuItem(
+          //   child: Text("My QR Code"),
+          //   value: _ScanOptions.MyQRCode,
+          // )
+        ],
+      )
     ];
 
     List<Widget> homeScreenContents = <Widget>[
@@ -267,6 +311,7 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
           child: Wrap(
             direction: Axis.horizontal,
             crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 1,
             children: transactionButtons,
           ),
         ),
@@ -360,7 +405,7 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
           itemBuilder: (BuildContext context, int index) {
             Widget transactionMemberImage = FutureBuilder<int>(
               future: checkUrlValidity(
-                  "${ApiConstants.baseUrl}/dist/images/hadwin_images/brands_and_businesses/${currentTransactions[index]['transactionMemberAvatar']}"),
+                  "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${currentTransactions[index]['transactionMemberAvatar']}"),
               builder: (context, snapshot) {
                 if (currentTransactions[index]
                         .containsKey('transactionMemberBusinessWebsite') &&
@@ -371,7 +416,7 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
                       aspectRatio: 1.0 / 1.0,
                       child: ColorFiltered(
                         colorFilter: ColorFilter.mode(
-                          Color(0xff243656),
+                          Color(AppColors.secondaryColorDim),
                           BlendMode.color,
                         ),
                         child: ColorFiltered(
@@ -380,7 +425,12 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
                             BlendMode.saturation,
                           ),
                           child: Image.network(
-                            "${ApiConstants.baseUrl}/dist/images/hadwin_images/brands_and_businesses/${currentTransactions[index]['transactionMemberAvatar']}",
+                            currentTransactions[index]
+                                        ['transactionMemberAvatar']
+                                    .toString()
+                                    .contains("http")
+                                ? "${currentTransactions[index]['transactionMemberAvatar']}"
+                                : "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${currentTransactions[index]['transactionMemberAvatar']}",
                             height: 72,
                             width: 72,
                             fit: BoxFit.contain,
@@ -399,7 +449,7 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
                       child: AspectRatio(
                         aspectRatio: 1.0 / 1.0,
                         child: Image.network(
-                          "${ApiConstants.baseUrl}/dist/images/hadwin_images/hadwin_users/${currentTransactions[index]['transactionMemberGender'].toLowerCase()}/${currentTransactions[index]['transactionMemberAvatar']}",
+                          "${ApiConstants.baseUrl}../storage/images/hadwin_images/hadwin_users/${currentTransactions[index]['transactionMemberGender'].toLowerCase()}/${currentTransactions[index]['transactionMemberAvatar']}",
                           height: 72,
                           width: 72,
                           fit: BoxFit.contain,
@@ -411,7 +461,11 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
                       child: AspectRatio(
                         aspectRatio: 1.0 / 1.0,
                         child: Image.network(
-                          "${ApiConstants.baseUrl}/dist/images/hadwin_images/brands_and_businesses/${currentTransactions[index]['transactionMemberAvatar']}",
+                          currentTransactions[index]['transactionMemberAvatar']
+                                  .toString()
+                                  .contains("http")
+                              ? "${currentTransactions[index]['transactionMemberAvatar']}"
+                              : "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${currentTransactions[index]['transactionMemberAvatar']}",
                           height: 72,
                           width: 72,
                           fit: BoxFit.contain,
@@ -423,7 +477,9 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
                   return Text(
                     currentTransactions[index]['transactionMemberName'][0]
                         .toUpperCase(),
-                    style: TextStyle(fontSize: 20, color: Color(0xff243656)),
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Color(AppColors.secondaryColorDim)),
                   );
                 }
               },
@@ -474,15 +530,15 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
                 ),
                 trailing: Text(
                   currentTransactions[index]['transactionType'] == "credit"
-                      ? "+ \$ ${currentTransactions[index]['transactionAmount'].toString()}"
-                      : "- \$ ${currentTransactions[index]['transactionAmount'].toString()}",
+                      ? "+ Rs. ${currentTransactions[index]['transactionAmount'].toString()}"
+                      : "- Rs. ${currentTransactions[index]['transactionAmount'].toString()}",
                   style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color: currentTransactions[index]['transactionType'] ==
                               "credit"
-                          ? Color(0xff37d39b)
-                          : Color(0xfff47090)),
+                          ? Colors.greenAccent
+                          : Colors.redAccent),
                 ),
                 onTap: _viewAllActivities,
               ),
@@ -496,13 +552,18 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
   }
 
   void goToWalletScreen() {
-    widget.setTab(3);
+    widget.setTab(1);
     Provider.of<TabNavigationProvider>(context, listen: false).updateTabs(0);
   }
 
   void _viewAllActivities() {
     Provider.of<TabNavigationProvider>(context, listen: false).updateTabs(0);
-    widget.setTab(2);
+    Navigator.push(
+            context,
+            SlideRightRoute(
+                page: AllTransactionActivities(
+                    user: widget.user, userAuthKey: widget.userAuthKey ?? "")))
+        .whenComplete(() => setState(() {}));
   }
 
   void _updateTransactions() {
@@ -547,4 +608,4 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
   }
 }
 
-enum _ScanOptions { ScanQRCode, MyQRCode }
+enum _ScanOptions { MyContacts, MyQRCode }

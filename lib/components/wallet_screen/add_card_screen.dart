@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickpaisa/components/add_card_screen/card_flipper.dart';
 import 'package:quickpaisa/components/add_card_screen/card_processing_screen.dart';
+import 'package:quickpaisa/resources/colors.dart';
 
 import 'package:quickpaisa/utilities/card_identifier.dart';
 import 'package:quickpaisa/utilities/slide_right_route.dart';
@@ -249,7 +250,7 @@ class _AddCardScreenState extends State<AddCardScreen>
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.all(16),
       height: 100,
-      color: Colors.white,
+      color: Color(AppColors.secondaryBackground),
       child: FocusScope(
           node: cardDetailsFocusNodes,
           child: ScrollablePositionedList.separated(
@@ -291,7 +292,7 @@ class _AddCardScreenState extends State<AddCardScreen>
         ));
 
     Widget cardInputNavigationButtons = Container(
-      color: Colors.green,
+      color: Color(AppColors.primaryColorDim),
       // width: double.infinity,
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.all(0),
@@ -311,14 +312,14 @@ class _AddCardScreenState extends State<AddCardScreen>
     return WillPopScope(
         onWillPop: () => Future.value(false),
         child: Scaffold(
-            backgroundColor: Color(0xffedf2f4),
+            backgroundColor: Color(AppColors.primaryBackground),
             appBar: MediaQuery.of(context).viewInsets.bottom == 0
                 ? AppBar(
                     title: Text("Add New Card"),
                     centerTitle: true,
                     backgroundColor: Colors.transparent,
                     elevation: 0,
-                    foregroundColor: Color(0xff243656),
+                    foregroundColor: Color(AppColors.secondaryText),
                     leading: IconButton(
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -488,7 +489,8 @@ class _AddCardScreenState extends State<AddCardScreen>
   };
 
   List<Widget> getCardInputFields() {
-    TextStyle inputLabelStyle = TextStyle(color: Colors.grey.shade600);
+    TextStyle inputLabelStyle =
+        TextStyle(color: Color(AppColors.secondaryText));
     return [
       Wrap(
         direction: Axis.vertical,

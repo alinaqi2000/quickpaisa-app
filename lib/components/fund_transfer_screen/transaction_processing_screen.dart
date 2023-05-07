@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:quickpaisa/components/fund_transfer_screen/transaction_receipt_screen.dart';
 import 'package:quickpaisa/providers/live_transactions_provider.dart';
 import 'package:quickpaisa/providers/user_login_state_provider.dart';
+import 'package:quickpaisa/resources/colors.dart';
 import 'package:quickpaisa/utilities/make_api_request.dart';
 import 'package:quickpaisa/utilities/display_error_alert.dart';
 import 'package:quickpaisa/utilities/slide_right_route.dart';
@@ -84,7 +85,7 @@ class _TransactionProcessingScreenState
         _transactionStatusAnimation = {
           'url': 'https://assets3.lottiefiles.com/packages/lf20_tl52xzvn.json',
           'width': 128.0,
-          'text': 'Sorry,\n transfer of only \$10000\nallowed per transaction'
+          'text': 'Sorry,\n transfer of only Rs.10000\nallowed per transaction'
         };
         _exitScreen = true;
       });
@@ -99,14 +100,17 @@ class _TransactionProcessingScreenState
   }
 
   void executeTransaction() async {
+    print(widget.transactionReceipt);
     String userAuthKey =
         Provider.of<UserLoginStateProvider>(context, listen: false)
             .userLoginAuthKey;
     responseForTransaction = await sendData(
-        urlPath: "/hadwin/v2/execute-transaction",
-        data: {
-          'transactionReceipt': widget.transactionReceipt,
-        },
+        // urlPath: "/hadwin/v2/execute-transaction",
+        urlPath: "execute-transaction",
+        // data: {
+        //   'transactionReceipt': widget.transactionReceipt,
+        // },
+        data: widget.transactionReceipt,
         authKey: userAuthKey);
 
     if (responseForTransaction.keys.join().toLowerCase().contains("error")) {
@@ -144,14 +148,10 @@ class _TransactionProcessingScreenState
                   height: 36,
                   key: ValueKey(1),
                   child: OutlinedButton(
-                      child: Text("View Transaction Receipt"),
-                      style: OutlinedButton.styleFrom(
-                        primary: Colors.blue,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(18),
-                          ),
-                        ),
+                      child: Text(
+                        "View Transaction Receipt",
+                        style:
+                            TextStyle(color: Color(AppColors.primaryColorDim)),
                       ),
                       onPressed: () {
                         Navigator.of(context).pop();
@@ -180,7 +180,7 @@ class _TransactionProcessingScreenState
                 AnimationController(vsync: this, upperBound: 0.7083);
             _transactionStatusAnimation = {
               'url':
-                  'https://assets1.lottiefiles.com/packages/lf20_vRx1sP.json',
+                  'https://assets1.lottiefiles.com/private_files/lf30_nsqfzxxx.json',
               'width': 220.0,
               'text':
                   'Your request has been sent to\n${widget.transactionReceipt['transactionMemberName']}'
@@ -207,7 +207,7 @@ class _TransactionProcessingScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Color(0xffedf2f4),
-      backgroundColor: Color(0xfffcfcfc),
+      backgroundColor: Color(AppColors.primaryBackground),
       appBar: AppBar(
         title: Text(
           "Transaction Status",
@@ -216,7 +216,7 @@ class _TransactionProcessingScreenState
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: Color(0xff243656),
+        foregroundColor: Color(AppColors.secondaryText),
         leading: IconButton(
             onPressed: () {
               Navigator.of(context).pop();
@@ -245,7 +245,7 @@ class _TransactionProcessingScreenState
                               height: 300,
                               width: 300,
                               child: Lottie.network(
-                                  'https://assets2.lottiefiles.com/packages/lf20_jxdtgpuk.json',
+                                  'https://assets1.lottiefiles.com/packages/lf20_usmfx6bp.json',
                                   controller:
                                       transactionProcessingAnimationController,
                                   onLoaded: (composition) {
@@ -292,7 +292,8 @@ class _TransactionProcessingScreenState
                             Text(
                               _transactionStatusAnimation!['text'],
                               style: GoogleFonts.poppins(
-                                  fontSize: 16, color: Color(0xff343a40)),
+                                  fontSize: 16,
+                                  color: Color(AppColors.primaryColor)),
                               textAlign: TextAlign.center,
                             )
                         ],

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:quickpaisa/qp_components.dart';
 
 import 'package:provider/provider.dart';
+import 'package:quickpaisa/resources/colors.dart';
 
 class AvailableBusinessesAndContactsScreen extends StatefulWidget {
   final String transactionType;
@@ -66,7 +67,7 @@ class _AvailableBusinessesAndContactsScreenState
 
     String currentSearchHint = searchHintsList[currentSearchHintIndex];
     return Scaffold(
-      backgroundColor: Color(0xfffdfdfd),
+      backgroundColor: Color(AppColors.primaryBackground),
       // backgroundColor: Color(0xfffcfcfc),
       appBar: AppBar(
         leading: IconButton(
@@ -75,7 +76,8 @@ class _AvailableBusinessesAndContactsScreenState
               Future.delayed(Duration(milliseconds: 200),
                   (() => Navigator.of(context).pop()));
             },
-            icon: Icon(Icons.arrow_back, color: Color(0xff243656))),
+            icon:
+                Icon(Icons.arrow_back, color: Color(AppColors.secondaryText))),
         title: Text(
           "Businesses and Contacts",
           style: TextStyle(fontSize: 17.5),
@@ -83,7 +85,7 @@ class _AvailableBusinessesAndContactsScreenState
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: Color(0xff243656),
+        foregroundColor: Color(AppColors.secondaryText),
         actions: [
           IconButton(
               onPressed: () {
@@ -95,7 +97,7 @@ class _AvailableBusinessesAndContactsScreenState
                 //             : MyQRCodeScreen()));
               },
               icon: Icon(FluentIcons.qr_code_28_regular,
-                  color: Color(0xff243656))),
+                  color: Color(AppColors.secondaryText))),
         ],
       ),
       body: Column(
@@ -110,18 +112,18 @@ class _AvailableBusinessesAndContactsScreenState
               onChanged: (value) {
                 setState(() {});
               },
-              style: TextStyle(color: Color(0xff929BAB)),
+              style: TextStyle(color: Color(AppColors.secondaryText)),
               decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xffF5F7FA), width: 1.618),
+                      borderSide: BorderSide(
+                          color: Color(AppColors.secondaryText), width: 1.618),
                       borderRadius: BorderRadius.all(Radius.circular(16))),
                   enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xffF5F7FA), width: 1.618),
+                      borderSide: BorderSide(
+                          color: Color(AppColors.secondaryText), width: 1.618),
                       borderRadius: BorderRadius.all(Radius.circular(16))),
                   hintText: currentSearchHint,
-                  hintStyle: TextStyle(color: Color(0xff929BAB))),
+                  hintStyle: TextStyle(color: Color(AppColors.secondaryText))),
             ),
           ),
           Expanded(
@@ -130,11 +132,13 @@ class _AvailableBusinessesAndContactsScreenState
               width: double.infinity,
               child: FutureBuilder<List<dynamic>>(
                 future: Future.wait([
-                  getData(
-                      urlPath: "/hadwin/v2/businesses-and-brands",
-                      authKey: userAuthKey),
-                  getData(
-                      urlPath: "/hadwin/v3/all-contacts", authKey: userAuthKey)
+                  // getData(
+                  //     urlPath: "/hadwin/v2/businesses-and-brands",
+                  //     authKey: userAuthKey),
+                  // getData(
+                  //     urlPath: "/hadwin/v3/all-contacts", authKey: userAuthKey)
+                  getData(urlPath: "all-brands", authKey: userAuthKey),
+                  getData(urlPath: "all-contacts", authKey: userAuthKey)
                 ]),
                 builder: (context, snapshot) {
                   List<Widget> children;
@@ -225,7 +229,7 @@ class _AvailableBusinessesAndContactsScreenState
                                       aspectRatio: 1.0 / 1.0,
                                       child: ColorFiltered(
                                         colorFilter: ColorFilter.mode(
-                                          Color(0xff243656),
+                                          Color(AppColors.secondaryText),
                                           BlendMode.color,
                                         ),
                                         child: ColorFiltered(
@@ -234,7 +238,7 @@ class _AvailableBusinessesAndContactsScreenState
                                             BlendMode.saturation,
                                           ),
                                           child: Image.network(
-                                            "${ApiConstants.baseUrl}/dist/images/hadwin_images/brands_and_businesses/${data[index]['avatar']}",
+                                            "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${data[index]['avatar']}",
                                             height: 72,
                                             width: 72,
                                             fit: BoxFit.contain,
@@ -250,7 +254,7 @@ class _AvailableBusinessesAndContactsScreenState
                                     child: AspectRatio(
                                       aspectRatio: 1.0 / 1.0,
                                       child: Image.network(
-                                        "${ApiConstants.baseUrl}/dist/images/hadwin_images/brands_and_businesses/${data[index]['avatar']}",
+                                        data[index]['avatar'],
                                         height: 72,
                                         width: 72,
                                         fit: BoxFit.contain,
@@ -261,7 +265,8 @@ class _AvailableBusinessesAndContactsScreenState
                                   contactImage = Text(
                                     data[index]['name'][0].toUpperCase(),
                                     style: TextStyle(
-                                        fontSize: 20, color: Color(0xff243656)),
+                                        fontSize: 20,
+                                        color: Color(AppColors.secondaryText)),
                                   );
                                 }
 
@@ -286,31 +291,34 @@ class _AvailableBusinessesAndContactsScreenState
                                     boxShadow: <BoxShadow>[
                                       BoxShadow(
                                           /*
-                                          color: Color(0xffF5F7FA),
+                                          color: Color(AppColors.secondaryText),
                                           blurRadius: 4,
                                           offset: Offset(0.0, 3),
                                           spreadRadius: 0
                                           */
-                                          color: Color(0xff1546a0)
-                                              .withOpacity(0.1),
+                                          color:
+                                              Color(AppColors.primaryColorDim)
+                                                  .withOpacity(0.1),
                                           blurRadius: 48,
                                           offset: Offset(2, 8),
                                           spreadRadius: -16),
                                     ],
-                                    color: Colors.white,
+                                    color: Color(AppColors.secondaryBackground),
                                   ),
                                   child: ListTile(
                                     contentPadding: EdgeInsets.all(0),
                                     horizontalTitleGap: 18,
                                     leading: CircleAvatar(
                                         radius: 38,
-                                        backgroundColor: Color(0xffF5F7FA),
+                                        backgroundColor:
+                                            Color(AppColors.secondaryText),
                                         child: contactImage),
                                     title: Text(
                                       data[index]['name'],
                                       style: TextStyle(
                                           fontSize: 16.5,
-                                          color: Color(0xff243656)),
+                                          color:
+                                              Color(AppColors.secondaryText)),
                                     ),
                                     subtitle: Container(
                                         margin: EdgeInsets.only(top: 7.2),
@@ -318,7 +326,8 @@ class _AvailableBusinessesAndContactsScreenState
                                           tileSubtitle,
                                           style: TextStyle(
                                               fontSize: 13,
-                                              color: Color(0xff929BAB)),
+                                              color: Color(
+                                                  AppColors.secondaryText)),
                                         )),
                                     onTap: () {
                                       Navigator.push(

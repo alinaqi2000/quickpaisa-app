@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quickpaisa/qp_components.dart';
+import 'package:quickpaisa/resources/colors.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -37,7 +38,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: Text(
                         'Already have an account? Sign in',
                         style:
-                            TextStyle(fontSize: 14, color: Color(0xFF929BAB)),
+                            TextStyle(fontSize: 14, color: Color(AppColors.secondaryText)),
                       ),
                       onTap: () {
                         Navigator.pop(context);

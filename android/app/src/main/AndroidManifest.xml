@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.hadwin">
+    package="com.quickpaisa.app">
     <uses-permission android:name="android.permission.INTERNET"/>
 <queries>
   <!--? app opens https URLs -->

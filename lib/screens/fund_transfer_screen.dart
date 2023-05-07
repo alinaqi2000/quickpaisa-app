@@ -260,7 +260,7 @@ class _FundTransferScreenState extends State<FundTransferScreen> {
                 prefix: Container(
                     margin: EdgeInsets.only(right: 10),
                     child: Text(
-                      "\$",
+                      "Rs.",
                       style: GoogleFonts.manrope(
                           fontSize: 40,
                           fontWeight: FontWeight.w600,
@@ -356,6 +356,8 @@ class _FundTransferScreenState extends State<FundTransferScreen> {
         userData['phone_number'];
     transactionReceipt['transactionInitiatorBankName'] =
         userData['bankDetails'][0]['bankName'];
+    transactionReceipt['transactionInitiatorBankAccountNo'] =
+        userData['bankDetails'][0]['accountNumber'];
     transactionReceipt['transactionInitiatorUid'] = userData['uid'];
     transactionReceipt['transactionInitiatorWalletAddress'] =
         userData['walletAddress'];

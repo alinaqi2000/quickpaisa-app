@@ -11,12 +11,8 @@ import 'package:quickpaisa/resources/colors.dart';
 class AllTransactionActivities extends StatefulWidget {
   final Map<String, dynamic> user;
   final String userAuthKey;
-  final Function setTab;
   const AllTransactionActivities(
-      {Key? key,
-      required this.user,
-      required this.userAuthKey,
-      required this.setTab})
+      {Key? key, required this.user, required this.userAuthKey})
       : super(key: key);
 
   @override
@@ -93,12 +89,13 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
-                int lastTab =
-                    Provider.of<TabNavigationProvider>(context, listen: false)
-                        .lastTab;
-                Provider.of<TabNavigationProvider>(context, listen: false)
-                    .removeLastTab();
-                widget.setTab(lastTab);
+                Navigator.pop(context);
+                // int lastTab =
+                //     Provider.of<TabNavigationProvider>(context, listen: false)
+                //         .lastTab;
+                // Provider.of<TabNavigationProvider>(context, listen: false)
+                //     .removeLastTab();
+                // widget.setTab(lastTab);
               },
               icon: Icon(Icons.arrow_back,
                   color: Color(AppColors.secondaryText))),
@@ -123,7 +120,8 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
                           onChanged: (value) {
                             setState(() {});
                           },
-                          style: TextStyle(color: Color(0xff929BAB)),
+                          style:
+                              TextStyle(color: Color(AppColors.secondaryText)),
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(6.18),
                               focusedBorder: OutlineInputBorder(
@@ -142,7 +140,7 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
                                       BorderRadius.all(Radius.circular(16))),
                               hintText: 'Search...',
                               hintStyle: TextStyle(
-                                color: Color(0xff929BAB),
+                                color: Color(AppColors.secondaryText),
                               )),
                         ),
                       );
@@ -182,7 +180,7 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
                 borderRadius: BorderRadius.circular(10)),
             child: ToggleButtons(
               borderRadius: BorderRadius.circular(10),
-              color: Color(0xff929BAB),
+              color: Color(AppColors.secondaryText),
               fillColor: Color(AppColors.primaryColorDim),
               selectedColor: Color(AppColors.secondaryText),
               renderBorder: false,
@@ -319,7 +317,12 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
                       itemBuilder: (context, transaction) {
                         Widget transactionMemberImage = FutureBuilder<int>(
                           future: checkUrlValidity(
-                              "${ApiConstants.baseUrl}/dist/images/hadwin_images/brands_and_businesses/${transaction['transactionMemberAvatar']}"),
+                            transaction['transactionMemberAvatar']
+                                    .toString()
+                                    .contains("http")
+                                ? "${transaction['transactionMemberAvatar']}"
+                                : "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${transaction['transactionMemberAvatar']}",
+                          ),
                           builder: (context, snapshot) {
                             if (transaction.containsKey(
                                     'transactionMemberBusinessWebsite') &&
@@ -339,7 +342,11 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
                                         BlendMode.saturation,
                                       ),
                                       child: Image.network(
-                                        "${ApiConstants.baseUrl}/dist/images/hadwin_images/brands_and_businesses/${transaction['transactionMemberAvatar']}",
+                                        transaction['transactionMemberAvatar']
+                                                .toString()
+                                                .contains("http")
+                                            ? "${transaction['transactionMemberAvatar']}"
+                                            : "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${transaction['transactionMemberAvatar']}",
                                         height: 72,
                                         width: 72,
                                         fit: BoxFit.contain,
@@ -358,7 +365,7 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
                                   child: AspectRatio(
                                     aspectRatio: 1.0 / 1.0,
                                     child: Image.network(
-                                      "${ApiConstants.baseUrl}/dist/images/hadwin_images/hadwin_users/${transaction['transactionMemberGender'].toLowerCase()}/${transaction['transactionMemberAvatar']}",
+                                      "${ApiConstants.baseUrl}../storage/images/hadwin_images/hadwin_users/${transaction['transactionMemberGender'].toLowerCase()}/${transaction['transactionMemberAvatar']}",
                                       height: 72,
                                       width: 72,
                                       fit: BoxFit.contain,
@@ -370,7 +377,7 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
                                   child: AspectRatio(
                                     aspectRatio: 1.0 / 1.0,
                                     child: Image.network(
-                                      "${ApiConstants.baseUrl}/dist/images/hadwin_images/brands_and_businesses/${transaction['transactionMemberAvatar']}",
+                                      "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${transaction['transactionMemberAvatar']}",
                                       height: 72,
                                       width: 72,
                                       fit: BoxFit.contain,
@@ -384,7 +391,7 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
                                     .toUpperCase(),
                                 style: TextStyle(
                                     fontSize: 20,
-                                    color: Color(AppColors.secondaryText)),
+                                    color: Color(AppColors.secondaryColorDim)),
                               );
                             }
                           },
@@ -421,7 +428,7 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
                               transaction['transactionMemberName'],
                               style: TextStyle(
                                   fontSize: 16.5,
-                                  color: Color(AppColors.secondaryText)),
+                                  color: Color(AppColors.secondaryColorDim)),
                             ),
                             subtitle: Padding(
                               padding: EdgeInsets.symmetric(vertical: 5),
@@ -431,20 +438,21 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
                                     DateTime.parse(
                                         transaction['transactionDate'])),
                                 style: TextStyle(
-                                    fontSize: 12, color: Color(0xff929BAB)),
+                                    fontSize: 12,
+                                    color: Color(AppColors.secondaryText)),
                               ),
                             ),
                             trailing: Text(
                               transaction['transactionType'] == "credit"
-                                  ? "+ \$ ${transaction['transactionAmount'].toString()}"
-                                  : "- \$ ${transaction['transactionAmount'].toString()}",
+                                  ? "+ Rs. ${transaction['transactionAmount'].toString()}"
+                                  : "- Rs. ${transaction['transactionAmount'].toString()}",
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                   color:
                                       transaction['transactionType'] == "credit"
-                                          ? Color(0xff37d39b)
-                                          : Color(0xfff47090)),
+                                          ? Colors.greenAccent
+                                          : Colors.redAccent),
                             ),
                             onTap: () => _viewTransactionReceipt(transaction),
                           ),

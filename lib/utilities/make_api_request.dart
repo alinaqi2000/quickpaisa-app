@@ -33,7 +33,7 @@ Future<Map<String, dynamic>> sendData(
       Uri.parse(backendServiceHost),
       headers: <String, String>{
         'Content-Type': 'application/json',
-        if (authKey != null) 'Authorization': authKey
+        if (authKey != null) 'Authorization': "Bearer " + authKey
       },
       body: jsonEncode(data),
     );

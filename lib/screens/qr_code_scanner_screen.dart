@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:quickpaisa/components/qr_code_scanner_screen/scan_error_screen.dart';
+import 'package:quickpaisa/resources/colors.dart';
 import 'package:quickpaisa/screens/fund_transfer_screen.dart';
 import 'package:quickpaisa/utilities/slide_right_route.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -33,13 +34,13 @@ class _QRCodeScannerScreenState extends State<QRCodeScannerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.8),
+      backgroundColor: Color(AppColors.primaryBackground).withOpacity(0.8),
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        foregroundColor: Color(0xff243656),
+        foregroundColor: Color(AppColors.secondaryText),
         elevation: 0,
-        title: Text("Scan QR Code", style: TextStyle(color: Color(0xff243656))),
+        title: Text("Scan QR Code", style: TextStyle(color: Color(AppColors.secondaryText))),
         centerTitle: true,
       ),
       body: Column(
@@ -51,14 +52,14 @@ class _QRCodeScannerScreenState extends State<QRCodeScannerScreen> {
   }
 
   Widget _buildQrView(BuildContext context) {
-    var scanArea = 230.0;
+    var scanArea = 300.0;
 
     return QRView(
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          borderColor: Color(0xFF0070BA),
-          overlayColor: Colors.white.withOpacity(0.8),
+          borderColor: Color(AppColors.primaryColor),
+          overlayColor: Color(AppColors.shadowColor).withOpacity(0.8),
           borderRadius: 10,
           borderLength: 30,
           borderWidth: 15,

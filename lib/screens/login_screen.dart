@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quickpaisa/qp_components.dart';
+import 'package:quickpaisa/resources/colors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: InkWell(
           child: Text(
             'Having trouble logging in?',
-            style: TextStyle(fontSize: 14, color: Color(0xFF929BAB)),
+            style: TextStyle(fontSize: 14, color: Color(AppColors.secondaryText)),
           ),
           onTap: getLoginHelp,
         ),
@@ -30,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: InkWell(
           child: Text(
             'Sign up',
-            style: TextStyle(fontSize: 14, color: Color(0xFF929BAB)),
+            style: TextStyle(fontSize: 14, color: Color(AppColors.secondaryText)),
           ),
           onTap: goToSignUpScreen,
         ),

@@ -8,9 +8,8 @@ import 'package:quickpaisa/resources/colors.dart';
 
 class AllContactsScreen extends StatefulWidget {
   final String userAuthKey;
-  final Function setTab;
-  const AllContactsScreen(
-      {Key? key, required this.userAuthKey, required this.setTab})
+  // final Function setTab;
+  const AllContactsScreen({Key? key, required this.userAuthKey})
       : super(key: key);
 
   @override
@@ -126,25 +125,28 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
   }
 
   void goBackToLastTabScreen() {
-    FocusManager.instance.primaryFocus?.unfocus();
-    contactSearchController.clear();
-    int lastTab =
-        Provider.of<TabNavigationProvider>(context, listen: false).lastTab;
-    Provider.of<TabNavigationProvider>(context, listen: false).removeLastTab();
+    Navigator.pop(context);
+    // FocusManager.instance.primaryFocus?.unfocus();
+    // contactSearchController.clear();
+    // int lastTab =
+    //     Provider.of<TabNavigationProvider>(context, listen: false).lastTab;
+    // Provider.of<TabNavigationProvider>(context, listen: false).removeLastTab();
 
-    widget.setTab(lastTab);
+    // widget.setTab(lastTab);
   }
 
   void _showInitiateTransactionDialogBox(Map<String, dynamic> otherParty) {
     WidgetsBinding.instance!.addPostFrameCallback((_) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
+              backgroundColor: Color(AppColors.secondaryBackground),
               title: Text(
                 "Pay/Request",
                 textAlign: TextAlign.center,
               ),
               content: Text(
                 "Decide what you want to do",
+                style: TextStyle(color: Color(AppColors.secondaryText)),
                 textAlign: TextAlign.center,
               ),
               shape: RoundedRectangleBorder(
@@ -163,8 +165,8 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               gradient: RadialGradient(colors: [
-                                Color(0xff0070BA),
-                                Color(0xff1546A0)
+                                Color(AppColors.primaryColorDim),
+                                Color(AppColors.primaryColorDim)
                               ], radius: 8.4, center: Alignment(-0.24, -0.36))),
                           child: ElevatedButton(
                               onPressed: () =>
@@ -186,8 +188,8 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               gradient: RadialGradient(colors: [
-                                Color(0xff0070BA),
-                                Color(0xff1546A0)
+                                Color(AppColors.secondaryColorDim),
+                                Color(AppColors.secondaryColorDim)
                               ], radius: 8.4, center: Alignment(-0.24, -0.36))),
                           child: ElevatedButton(
                               onPressed: () =>
@@ -209,7 +211,7 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
                       padding: EdgeInsets.all(10),
                       child: Text(
                         "tap the back button or outside this dialog box to cancel",
-                        style: TextStyle(color: Colors.grey.shade400),
+                        style: TextStyle(color: Color(AppColors.secondaryText)),
                         textAlign: TextAlign.center,
                       ),
                     ),

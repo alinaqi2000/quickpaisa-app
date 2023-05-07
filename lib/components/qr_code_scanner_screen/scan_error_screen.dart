@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:quickpaisa/resources/colors.dart';
 
 class ScanErrorScreen extends StatefulWidget {
   const ScanErrorScreen({Key? key}) : super(key: key);
@@ -31,13 +32,13 @@ class _ScanErrorScreenState extends State<ScanErrorScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffedf2f4),
+      backgroundColor: Color(AppColors.primaryBackground),
       appBar: AppBar(
         title: Text("Error"),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: Color(0xff243656),
+        foregroundColor: Color(AppColors.secondaryText),
         leading: IconButton(
             onPressed: () {
               Navigator.of(context).pop();
@@ -67,6 +68,7 @@ class _ScanErrorScreenState extends State<ScanErrorScreen>
                 "Code not recognized",
                 textAlign: TextAlign.center,
                 style: GoogleFonts.poppins(
+                  color: Colors.redAccent,
                   fontSize: 16,
                 ),
               )
