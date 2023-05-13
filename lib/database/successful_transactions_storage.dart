@@ -51,21 +51,22 @@ class SuccessfulTransactionsStorage {
 
   Future<bool> updateSuccessfulTransactions(
       Map<String, dynamic> transactionReceipt) async {
-    try {
-      final file = await _successfulTransactionsFile;
+    // try {
+    //   final file = await _successfulTransactionsFile;
 
-      final contents = await file.readAsString();
+    //   final contents = await file.readAsString();
 
-      var decodedFile = jsonDecode(contents);
-      decodedFile['transactions'].add(transactionReceipt);
+    //   var decodedFile = jsonDecode(contents);
+    //   decodedFile['transactions'].add(transactionReceipt);
 
-      return file.writeAsString(jsonEncode(decodedFile)).then((value) {
-        //* transactions updated
-        return true;
-      });
-    } catch (e) {
-      return false;
-    }
+    //   return file.writeAsString(jsonEncode(decodedFile)).then((value) {
+    //     //* transactions updated
+    //     return true;
+    //   });
+    // } catch (e) {
+    //   return false;
+    // }
+    return true;
   }
 
   Future<bool> deleteFile() async {

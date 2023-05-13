@@ -48,7 +48,11 @@ dependencies:
   google_nav_bar: ^5.0.6
   path_provider: ^2.0.9
   markdown_widget: ^1.2.8
-
+  select_form_field: "^2.2.0"
+  flutter_downloader: ^1.10.2
+  permission_handler: ^10.2.0
+  dio: ^5.1.2
+  share_files_and_screenshot_widgets: ^1.0.6
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -6,7 +6,7 @@ Widget _activityloadingTile() {
             child: FadeShimmer(
               height: 18,
               width: 180,
-              fadeTheme: FadeTheme.light,
+              fadeTheme: FadeTheme.dark,
             ),
             padding: EdgeInsets.all(5),
           );
@@ -16,7 +16,7 @@ Widget _activityloadingTile() {
       Container(
         child: FadeShimmer.round(
           size: 64,
-          fadeTheme: FadeTheme.light,
+          fadeTheme: FadeTheme.dark,
         ),
         padding: EdgeInsets.all(5),
       ),
@@ -32,7 +32,7 @@ Widget _activityloadingTile() {
             child: FadeShimmer(
               height: 18,
               width: 30,
-              fadeTheme: FadeTheme.light,
+              fadeTheme: FadeTheme.dark,
             ),
             padding: EdgeInsets.all(5),
           ),

@@ -25,7 +25,6 @@ class UserLoginStateProvider with ChangeNotifier {
   bool initializeBankBalance(Map<String, dynamic> userData) {
     _bankBalance = userData['bankDetails'].fold(
         0.0, (sum, account) => sum + double.parse(account['bankBalance']));
-    print(_bankBalance);
     notifyListeners();
     return true;
   }

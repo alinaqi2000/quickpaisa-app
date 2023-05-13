@@ -5,37 +5,37 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickpaisa/qp_components.dart';
 import 'package:quickpaisa/resources/colors.dart';
+import 'package:quickpaisa/screens/add_brand.dart';
+import 'package:quickpaisa/screens/my_products.dart';
 
-class AllContactsScreen extends StatefulWidget {
+class AllBrandsScreen extends StatefulWidget {
   final String userAuthKey;
   // final Function setTab;
-  const AllContactsScreen({Key? key, required this.userAuthKey})
+  const AllBrandsScreen({Key? key, required this.userAuthKey})
       : super(key: key);
 
   @override
-  State<AllContactsScreen> createState() => _AllContactsScreenState();
+  State<AllBrandsScreen> createState() => _AllBrandsScreenState();
 }
 
-class _AllContactsScreenState extends State<AllContactsScreen> {
-  late TextEditingController contactSearchController;
+class _AllBrandsScreenState extends State<AllBrandsScreen> {
+  late TextEditingController brandSearchController;
 
   List<String> searchHintsList = [
     'Search...',
-    'Search for a contact by their name',
-    'Search by their phone number',
-    'Search by their email id',
+    'Search for a brand by it\'s title',
   ];
   int currentSearchHintIndex = 0;
 
-  Timer? _updateContactsSearchingHintTimer;
+  Timer? _updateBrandsSearchingHintTimer;
 
   @override
   void initState() {
     super.initState();
-    contactSearchController = TextEditingController();
-    // _updateContactsSearchingHintTimer =
+    brandSearchController = TextEditingController();
+    // _updateBrandsSearchingHintTimer =
     //     Timer.periodic(Duration(seconds: 10), (timer) {
-    //   if (mounted && contactSearchController.text.isEmpty) {
+    //   if (mounted && brandSearchController.text.isEmpty) {
     //     setState(() {
     //       if (currentSearchHintIndex == searchHintsList.length - 1) {
     //         currentSearchHintIndex = 0;
@@ -50,8 +50,8 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
 
   @override
   void dispose() {
-    _updateContactsSearchingHintTimer!.cancel();
-    contactSearchController.dispose();
+    _updateBrandsSearchingHintTimer!.cancel();
+    brandSearchController.dispose();
 
     super.dispose();
   }
@@ -59,10 +59,10 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
   @override
   Widget build(BuildContext context) {
     String currentSearchHint = searchHintsList[currentSearchHintIndex];
-    Widget searchContacts = Container(
+    Widget searchBrands = Container(
       margin: EdgeInsets.only(top: 28, bottom: 14, left: 28, right: 28),
       child: TextField(
-        controller: contactSearchController,
+        controller: brandSearchController,
         onChanged: (value) {
           setState(() {});
         },
@@ -89,7 +89,7 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
               onPressed: goBackToLastTabScreen,
               icon: Icon(Icons.arrow_back,
                   color: Color(AppColors.secondaryText))),
-          title: Text("My Contacts",
+          title: Text("My Brands",
               style: TextStyle(color: Color(AppColors.primaryText))),
           centerTitle: true,
           actions: [
@@ -101,23 +101,39 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Color(AppColors.primaryColorDim),
+          child: const Icon(
+            Icons.add,
+            color: Color(AppColors.primaryBackground),
+            size: 28,
+          ),
+          onPressed: () => {
+            Navigator.push(
+                context,
+                SlideRightRoute(
+                    page: AddBrandScreen(
+                  userAuthKey: widget.userAuthKey,
+                )))
+          },
+        ),
         extendBodyBehindAppBar: true,
         body: Column(
           children: [
             SizedBox(
               height: 80,
             ),
-            searchContacts,
+            searchBrands,
             Expanded(
               child: Container(
                 height: 300,
                 width: double.infinity,
                 child: FutureBuilder<Map<String, dynamic>>(
                     future: getData(
-                        // urlPath: "/hadwin/v3/all-contacts",
-                        urlPath: "all-contacts",
+                        // urlPath: "/hadwin/v3/all-brands",
+                        urlPath: "all-brands",
                         authKey: widget.userAuthKey),
-                    builder: buildContacts),
+                    builder: buildBrands),
               ),
             )
           ],
@@ -127,7 +143,7 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
   void goBackToLastTabScreen() {
     Navigator.pop(context);
     // FocusManager.instance.primaryFocus?.unfocus();
-    // contactSearchController.clear();
+    // brandSearchController.clear();
     // int lastTab =
     //     Provider.of<TabNavigationProvider>(context, listen: false).lastTab;
     // Provider.of<TabNavigationProvider>(context, listen: false).removeLastTab();
@@ -224,6 +240,20 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
             )));
   }
 
+  void _tryDeleteBrand(String id) async {
+    final dataReceived = await sendData(
+        urlPath: "delete-brand/" + id, data: {}, authKey: widget.userAuthKey);
+    print(dataReceived);
+    if (dataReceived.keys.join().toLowerCase().contains("error")) {
+      showErrorAlert(context, dataReceived);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Brand deleted successfully!"),
+          backgroundColor: Colors.green));
+      Navigator.of(context).pop();
+    }
+  }
+
   void _makeATransaction(
       Map<String, dynamic> otherParty, String transactionType) {
     FocusManager.instance.primaryFocus?.unfocus();
@@ -237,12 +267,82 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
         )));
   }
 
+  void _deleteBrandDialog(String id) {
+    Decoration buttonDecoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(10),
+    );
+    ButtonStyle successButtonStyle = ElevatedButton.styleFrom(
+      primary: Color(AppColors.secondaryColorDim),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    );
+    ButtonStyle delButtonStyle = ElevatedButton.styleFrom(
+      primary: Colors.redAccent,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    );
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+              backgroundColor: Color(AppColors.secondaryBackground),
+              title: Text(
+                "Delete Brand?",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Color(AppColors.secondaryColorDim)),
+              ),
+              content: Text(
+                "Are you sure, you want to delete this brand and it's products",
+                textAlign: TextAlign.center,
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              actionsAlignment: MainAxisAlignment.center,
+              actions: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 48,
+                          width: 100,
+                          decoration: buttonDecoration,
+                          child: ElevatedButton(
+                              onPressed: () => _tryDeleteBrand(id),
+                              child: Text('Delete'),
+                              style: delButtonStyle),
+                        ),
+                        SizedBox(
+                          width: 24,
+                        ),
+                        Container(
+                          height: 48,
+                          width: 100,
+                          decoration: buttonDecoration,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Cancel'),
+                              style: successButtonStyle),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                )
+              ],
+            ));
+  }
+
   void openQRCodeScanner() {
     FocusManager.instance.primaryFocus?.unfocus();
     Navigator.push(context, SlideRightRoute(page: QRCodeScannerScreen()));
   }
 
-  Widget buildContacts(
+  Widget buildBrands(
       BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
     List<Widget> children;
     if (snapshot.hasData) {
@@ -253,27 +353,16 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
         return contactsLoadingList(10);
       } else {
         List<dynamic> data;
-        if (contactSearchController.text.isEmpty) {
-          data = snapshot.data!['contacts'];
+        if (brandSearchController.text.isEmpty) {
+          data = snapshot.data!['brands'];
         } else {
-          List<dynamic> nameMatch = snapshot.data!['contacts']
-              .where((contact) =>
-                  RegExp("${contactSearchController.text.toLowerCase()}")
-                      .hasMatch(contact['name'].toLowerCase()))
+          List<dynamic> nameMatch = snapshot.data!['brands']
+              .where((brand) =>
+                  RegExp("${brandSearchController.text.toLowerCase()}")
+                      .hasMatch(brand['name'].toLowerCase()))
               .toList();
-          List<dynamic> emailMatch = snapshot.data!['contacts']
-              .where((contact) =>
-                  RegExp("${contactSearchController.text.toLowerCase()}")
-                      .hasMatch(contact['emailAddress'].toLowerCase()))
-              .toList();
-          List<dynamic> phoneNumberMatch = snapshot.data!['contacts']
-              .where((contact) =>
-                  RegExp("${contactSearchController.text.toLowerCase()}")
-                      .hasMatch(contact['phoneNumber'].toLowerCase()))
-              .toList();
-          data = [...nameMatch, ...emailMatch, ...phoneNumberMatch]
-              .toSet()
-              .toList();
+
+          data = [...nameMatch].toSet().toList();
         }
         if (data.isEmpty) {
           return Center(
@@ -285,36 +374,29 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
             child: ListView.separated(
                 padding: EdgeInsets.all(0),
                 itemBuilder: (_, index) {
-                  Widget contactImage;
-                  // if (data[index].containsKey('avatar')) {
-                  //   contactImage = ClipOval(
-                  //     child: AspectRatio(
-                  //       aspectRatio: 1.0 / 1.0,
-                  //       child: Image.network(
-                  //         // "${ApiConstants.baseUrl}/dist/images/hadwin_images/brands_and_businesses/${data[index]['avatar']}",
-                  //         "${data[index]['avatar']}",
-                  //         height: 68,
-                  //         width: 68,
-                  //         fit: BoxFit.contain,
-                  //       ),
-                  //     ),
-                  //   );
-                  // } else {
-                  contactImage = Text(
-                    data[index]['name'][0].toUpperCase(),
-                    style: TextStyle(
-                        fontSize: 20, color: Color(AppColors.primaryColorDim)),
-                  );
-                  // }
+                  Widget brandImage;
+                  if (data[index].containsKey('avatar')) {
+                    brandImage = ClipOval(
+                      child: AspectRatio(
+                        aspectRatio: 1.0 / 1.0,
+                        child: Image.network(
+                          "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${data[index]['avatar']}",
+                          // "${data[index]['avatar']}",
+                          height: 68,
+                          width: 68,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    );
+                  } else {
+                    brandImage = Text(
+                      data[index]['name'][0].toUpperCase(),
+                      style: TextStyle(
+                          fontSize: 20, color: Color(AppColors.secondaryColor)),
+                    );
+                  }
 
-                  String tileSubtitle;
-
-                  // if (data[index].containsKey('emailAddress') &&
-                  //     data[index].containsKey('avatar')) {
-                  //   tileSubtitle = data[index]['emailAddress'];
-                  // } else {
-                  tileSubtitle = data[index]['phoneNumber'];
-                  // }
+                  String tileSubtitle = data[index]['homepage'] ?? "";
 
                   return Container(
                     padding: EdgeInsets.all(5),
@@ -338,7 +420,7 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
                     child: ListTile(
                       contentPadding: EdgeInsets.all(0),
                       leading: CircleAvatar(
-                        child: contactImage,
+                        child: brandImage,
                         backgroundColor: Color(AppColors.shadowColor),
                         radius: 36.0,
                       ),
@@ -346,19 +428,26 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
                         data[index]['name'],
                         style: TextStyle(
                             fontSize: 13,
-                            color: Color(AppColors.secondaryColorDim)),
+                            color: Color(AppColors.secondaryColor)),
                       ),
                       subtitle: Container(
                           margin: EdgeInsets.only(top: 7.2),
                           child: Text(
                             tileSubtitle,
                             style: TextStyle(
-                                fontSize: 11,
-                                color: Color(AppColors.secondaryText)),
+                                fontSize: 11, color: Color(AppColors.secondaryText)),
                           )),
                       horizontalTitleGap: 18,
-                      onTap: () =>
-                          _showInitiateTransactionDialogBox(data[index]),
+                      onLongPress: () =>
+                          _deleteBrandDialog("${data[index]['id']}"),
+                      onTap: () => Navigator.push(
+                          context,
+                          SlideRightRoute(
+                              page: MyProductsScreen(
+                            brandId: "${data[index]['id']}",
+                            brandName: "${data[index]['name']}",
+                            userAuthKey: widget.userAuthKey,
+                          ))),
                     ),
                   );
                 },

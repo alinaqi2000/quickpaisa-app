@@ -38,19 +38,19 @@ class _AvailableBusinessesAndContactsScreenState
     super.initState();
     transactionButton = widget.transactionType == 'debit' ? "Pay" : 'Request';
     contactSearchController = TextEditingController();
-    _updateContactsSearchingHintTimer =
-        Timer.periodic(Duration(seconds: 10), (timer) {
-      if (mounted && contactSearchController.text.isEmpty) {
-        setState(() {
-          if (currentSearchHintIndex == searchHintsList.length - 1) {
-            currentSearchHintIndex = 0;
-          } else {
-            currentSearchHintIndex++;
-          }
-        });
-        //* search hint updated
-      }
-    });
+    // _updateContactsSearchingHintTimer =
+    //     Timer.periodic(Duration(seconds: 10), (timer) {
+    //   if (mounted && contactSearchController.text.isEmpty) {
+    //     setState(() {
+    //       if (currentSearchHintIndex == searchHintsList.length - 1) {
+    //         currentSearchHintIndex = 0;
+    //       } else {
+    //         currentSearchHintIndex++;
+    //       }
+    //     });
+    //     //* search hint updated
+    //   }
+    // });
   }
 
   @override
@@ -89,12 +89,12 @@ class _AvailableBusinessesAndContactsScreenState
         actions: [
           IconButton(
               onPressed: () {
-                // Navigator.push(
-                //     context,
-                //     SlideRightRoute(
-                //         page: widget.transactionType == 'debit'
-                //             ? QRCodeScannerScreen()
-                //             : MyQRCodeScreen()));
+                Navigator.push(
+                    context,
+                    SlideRightRoute(
+                        page: widget.transactionType == 'debit'
+                            ? QRCodeScannerScreen()
+                            : MyQRCodeScreen()));
               },
               icon: Icon(FluentIcons.qr_code_28_regular,
                   color: Color(AppColors.secondaryText))),
@@ -137,26 +137,22 @@ class _AvailableBusinessesAndContactsScreenState
                   //     authKey: userAuthKey),
                   // getData(
                   //     urlPath: "/hadwin/v3/all-contacts", authKey: userAuthKey)
-                  getData(urlPath: "all-brands", authKey: userAuthKey),
+                  // getData(urlPath: "all-brands", authKey: userAuthKey),
                   getData(urlPath: "all-contacts", authKey: userAuthKey)
                 ]),
                 builder: (context, snapshot) {
                   List<Widget> children;
                   if (snapshot.hasData) {
                     if (snapshot.data![0].keys
-                            .join()
-                            .toLowerCase()
-                            .contains("error") ||
-                        snapshot.data![1].keys
-                            .join()
-                            .toLowerCase()
-                            .contains("error")) {
+                        .join()
+                        .toLowerCase()
+                        .contains("error")) {
                       Map<String, dynamic> error = snapshot.data![0].keys
                               .join()
                               .toLowerCase()
                               .contains("error")
                           ? snapshot.data![0]
-                          : snapshot.data![1];
+                          : [];
                       WidgetsBinding.instance!.addPostFrameCallback(
                           (_) => showErrorAlert(context, error));
 
@@ -166,13 +162,13 @@ class _AvailableBusinessesAndContactsScreenState
 
                       if (contactSearchController.text.isEmpty) {
                         data = [
-                          ...snapshot.data![0]['businesses'],
-                          ...snapshot.data![1]['contacts']
+                          // ...snapshot.data![0]['businesses'],
+                          ...snapshot.data![0]['contacts']
                         ];
                       } else {
                         data = [
-                          ...snapshot.data![0]['businesses'],
-                          ...snapshot.data![1]['contacts']
+                          // ...snapshot.data![0]['businesses'],
+                          ...snapshot.data![0]['contacts']
                         ];
 
                         List<dynamic> nameMatch = data
@@ -247,26 +243,28 @@ class _AvailableBusinessesAndContactsScreenState
                                       ),
                                     ),
                                   );
-                                } else if (data[index]
-                                        .containsKey('emailAddress') &&
-                                    data[index].containsKey('avatar')) {
-                                  contactImage = ClipOval(
-                                    child: AspectRatio(
-                                      aspectRatio: 1.0 / 1.0,
-                                      child: Image.network(
-                                        data[index]['avatar'],
-                                        height: 72,
-                                        width: 72,
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                  );
+                                  // }
+                                  // else if (data[index]
+                                  //         .containsKey('emailAddress') &&
+                                  //     data[index].containsKey('avatar')) {
+                                  //   contactImage = ClipOval(
+                                  //     child: AspectRatio(
+                                  //       aspectRatio: 1.0 / 1.0,
+                                  //       child: Image.network(
+                                  //         data[index]['avatar'],
+                                  //         height: 72,
+                                  //         width: 72,
+                                  //         fit: BoxFit.contain,
+                                  //       ),
+                                  //     ),
+                                  //   );
                                 } else {
                                   contactImage = Text(
                                     data[index]['name'][0].toUpperCase(),
                                     style: TextStyle(
                                         fontSize: 20,
-                                        color: Color(AppColors.secondaryText)),
+                                        color:
+                                            Color(AppColors.primaryColorDim)),
                                   );
                                 }
 
@@ -311,21 +309,21 @@ class _AvailableBusinessesAndContactsScreenState
                                     leading: CircleAvatar(
                                         radius: 38,
                                         backgroundColor:
-                                            Color(AppColors.secondaryText),
+                                            Color(AppColors.shadowColor),
                                         child: contactImage),
                                     title: Text(
                                       data[index]['name'],
                                       style: TextStyle(
-                                          fontSize: 16.5,
-                                          color:
-                                              Color(AppColors.secondaryText)),
+                                          fontSize: 13,
+                                          color: Color(
+                                              AppColors.secondaryColorDim)),
                                     ),
                                     subtitle: Container(
                                         margin: EdgeInsets.only(top: 7.2),
                                         child: Text(
                                           tileSubtitle,
                                           style: TextStyle(
-                                              fontSize: 13,
+                                              fontSize: 11,
                                               color: Color(
                                                   AppColors.secondaryText)),
                                         )),

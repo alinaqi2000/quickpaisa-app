@@ -24,6 +24,7 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
   List<dynamic> allTransactions = [];
   List<bool> _activeToggleMenu = [true, false, false];
   Map<String, dynamic>? error = null;
+  bool fetching = true;
   late TextEditingController activitySearch;
 
   Widget appBarTitle = Text("Activities",
@@ -56,11 +57,16 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
   }
 
   void getTransactionsFromApi() async {
+    setState(() {
+      fetching = true;
+    });
     final response = await Future.wait([
       getData(urlPath: "all-transactions", authKey: widget.userAuthKey),
       SuccessfulTransactionsStorage().getSuccessfulTransactions()
     ]);
-
+    setState(() {
+      fetching = false;
+    });
     if (response[0].keys.join().toLowerCase().contains("error") ||
         response[1].keys.join().toLowerCase().contains("error")) {
       setState(() {
@@ -236,7 +242,7 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
                     (_) => showErrorAlert(context, error!));
 
                 return activitiesLoadingList(10);
-              } else if (allTransactions.isEmpty) {
+              } else if (fetching) {
                 return activitiesLoadingList(10);
               } else if (error == null) {
                 List<dynamic> currentTransactions;
@@ -391,7 +397,7 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
                                     .toUpperCase(),
                                 style: TextStyle(
                                     fontSize: 20,
-                                    color: Color(AppColors.secondaryColorDim)),
+                                    color: Color(AppColors.primaryColorDim)),
                               );
                             }
                           },
@@ -421,13 +427,13 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
                                 left: 0, top: 0, bottom: 0, right: 6.18),
                             leading: CircleAvatar(
                                 radius: 38,
-                                backgroundColor:
-                                    Color(AppColors.secondaryBackground),
+                                backgroundColor: Color(AppColors.shadowColor),
                                 child: transactionMemberImage),
                             title: Text(
                               transaction['transactionMemberName'],
                               style: TextStyle(
-                                  fontSize: 16.5,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
                                   color: Color(AppColors.secondaryColorDim)),
                             ),
                             subtitle: Padding(
@@ -438,22 +444,24 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
                                     DateTime.parse(
                                         transaction['transactionDate'])),
                                 style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 10,
                                     color: Color(AppColors.secondaryText)),
                               ),
                             ),
-                            trailing: Text(
-                              transaction['transactionType'] == "credit"
-                                  ? "+ Rs. ${transaction['transactionAmount'].toString()}"
-                                  : "- Rs. ${transaction['transactionAmount'].toString()}",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  color:
-                                      transaction['transactionType'] == "credit"
+                            trailing: Padding(
+                                padding: EdgeInsets.only(right: 2),
+                                child: Text(
+                                  transaction['transactionType'] == "credit"
+                                      ? "+ Rs. ${transaction['transactionAmount'].toString()}"
+                                      : "- Rs. ${transaction['transactionAmount'].toString()}",
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: transaction['transactionType'] ==
+                                              "credit"
                                           ? Colors.greenAccent
                                           : Colors.redAccent),
-                            ),
+                                )),
                             onTap: () => _viewTransactionReceipt(transaction),
                           ),
                         );

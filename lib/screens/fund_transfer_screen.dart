@@ -33,6 +33,13 @@ class _FundTransferScreenState extends State<FundTransferScreen> {
   void initState() {
     super.initState();
     setUserData();
+    if (widget.otherParty['type'] == 'product') {
+      widget.otherParty['name'] = widget.otherParty['title'];
+      widget.otherParty['avatar'] = widget.otherParty['banner'] ?? "";
+      widget.otherParty['homepage'] = widget.otherParty['brandName'] ?? "";
+      this._controllerHelperText = widget.otherParty['amount'];
+    }
+
     transactionButton = widget.transactionType == 'debit' ? "Send" : 'Request';
     numPadKeys =
         List<int>.generate(9, (i) => i + 1).map(_createButton).toList();
@@ -108,6 +115,9 @@ class _FundTransferScreenState extends State<FundTransferScreen> {
     numPadKeys.addAll(bottomKeys);
     _transactionAmountController =
         TextEditingController(text: _controllerHelperText);
+    _transactionAmountController.value = TextEditingValue(
+      text: this._controllerHelperText,
+    );
 
     initializeTransactionReceipt();
   }
@@ -156,62 +166,22 @@ class _FundTransferScreenState extends State<FundTransferScreen> {
                     EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 6.18),
                 leading: CircleAvatar(
                   radius: 38,
-                  backgroundColor: Color(AppColors.primaryColorDim),
+                  backgroundColor: Color(AppColors.shadowColor),
                   child: FutureBuilder<int>(
                     // future: checkUrlValidity(
                     //     "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${widget.otherParty['avatar']}"),
                     builder: (context, snapshot) {
                       Widget contactImage;
-                      if (widget.otherParty.containsKey('emailAddress') &&
-                          widget.otherParty.containsKey('avatar') &&
+                      if (widget.otherParty.containsKey('avatar') &&
                           snapshot.hasData) {
-                        if (snapshot.data == 404) {
-                          contactImage = ClipOval(
-                            child: AspectRatio(
-                              aspectRatio: 1.0 / 1.0,
-                              child: Image.network(
-                                "${widget.otherParty['avatar']}",
-                                height: 72,
-                                width: 72,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          );
-                        } else {
-                          contactImage = ClipOval(
-                            child: AspectRatio(
-                              aspectRatio: 1.0 / 1.0,
-                              child: Image.network(
-                                "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${widget.otherParty['avatar']}",
-                                height: 72,
-                                width: 72,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          );
-                        }
-                      } else if (widget.otherParty.containsKey('homepage') &&
-                          widget.otherParty.containsKey('avatar')) {
                         contactImage = ClipOval(
                           child: AspectRatio(
                             aspectRatio: 1.0 / 1.0,
-                            child: ColorFiltered(
-                              colorFilter: ColorFilter.mode(
-                                Color(AppColors.secondaryText),
-                                BlendMode.color,
-                              ),
-                              child: ColorFiltered(
-                                colorFilter: ColorFilter.mode(
-                                  Colors.grey,
-                                  BlendMode.saturation,
-                                ),
-                                child: Image.network(
-                                  "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${widget.otherParty['avatar']}",
-                                  height: 72,
-                                  width: 72,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
+                            child: Image.network(
+                              "${widget.otherParty['avatar']}",
+                              height: 72,
+                              width: 72,
+                              fit: BoxFit.contain,
                             ),
                           ),
                         );
@@ -220,7 +190,7 @@ class _FundTransferScreenState extends State<FundTransferScreen> {
                           widget.otherParty['name'][0].toUpperCase(),
                           style: TextStyle(
                               fontSize: 20,
-                              color: Color(AppColors.secondaryText)),
+                              color: Color(AppColors.primaryColorDim)),
                         );
                       }
 
@@ -230,11 +200,13 @@ class _FundTransferScreenState extends State<FundTransferScreen> {
                 ),
                 title: Text(
                   widget.otherParty['name'],
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(
+                      fontSize: 13, color: Color(AppColors.secondaryColorDim)),
                 ),
                 subtitle: Text(
                   tileSubtitle,
-                  style: TextStyle(fontSize: 13, color: Color(0xff929BAB)),
+                  style: TextStyle(
+                      fontSize: 11, color: Color(AppColors.secondaryText)),
                 )),
           ),
           Padding(
@@ -549,7 +521,7 @@ class _FundTransferScreenState extends State<FundTransferScreen> {
         widget.otherParty.containsKey('avatar')) {
       tileSubtitle = widget.otherParty['homepage'];
     } else {
-      tileSubtitle = widget.otherParty['phoneNumber'];
+      tileSubtitle = widget.otherParty['homepage'] ?? "";
     }
   }
 }

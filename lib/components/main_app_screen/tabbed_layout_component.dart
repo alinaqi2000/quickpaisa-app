@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -47,7 +48,7 @@ class _TabbedLayoutComponentState extends State<TabbedLayoutComponent> {
     super.initState();
 
     _updateTransactionsTimer = Timer.periodic(
-        Duration(minutes: [1, 2, 3, 4][Random().nextInt(4)]), (Timer t) {
+        Duration(minutes: [1, 2, 3, 4][Random().nextInt(4)]), (Timer t) async {
       Provider.of<LiveTransactionsProvider>(context, listen: false)
           .updateTransactionRequests();
     });

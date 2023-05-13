@@ -1,21 +1,117 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:quickpaisa/database/user_data_storage.dart';
 
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:quickpaisa/resources/colors.dart';
+import 'package:dio/dio.dart';
+import 'package:quickpaisa/qp_components.dart';
 
-class MyQRCodeScreen extends StatelessWidget {
-  const MyQRCodeScreen({Key? key}) : super(key: key);
+class ProductQRCodeScreen extends StatefulWidget {
+  final dynamic product;
+
+  const ProductQRCodeScreen({Key? key, this.product}) : super(key: key);
+
+  @override
+  State<ProductQRCodeScreen> createState() => _ProductQRCodeScreen();
+}
+
+class _ProductQRCodeScreen extends State<ProductQRCodeScreen> {
+  String _downloadButtonText = "Download PDF";
+  bool _isDownloading = false;
+  String _localPath = "";
+  bool _permissionReady = false;
+
+  Future<String?> _findLocalPath() async {
+    if (Platform.isAndroid) {
+      return "/storage/emulated/0/Download/";
+    } else {
+      var directory = await getApplicationDocumentsDirectory();
+      return directory.path + Platform.pathSeparator + 'Download';
+    }
+  }
+
+  Future<bool> _checkPermission() async {
+    if (Platform.isAndroid) {
+      final status = await Permission.storage.status;
+      if (status != PermissionStatus.granted) {
+        final result = await Permission.storage.request();
+        if (result == PermissionStatus.granted) {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> _prepareSaveDir() async {
+    _localPath = (await _findLocalPath())!;
+
+    print(_localPath);
+    final savedDir = Directory(_localPath);
+    bool hasExisted = await savedDir.exists();
+    if (!hasExisted) {
+      savedDir.create();
+    }
+  }
+
+  void _downloadPDF() async {
+    _permissionReady = await _checkPermission();
+    if (_permissionReady) {
+      if (!_isDownloading) {
+        await _prepareSaveDir();
+        try {
+          setState(() {
+            _downloadButtonText = "Generating PDF...";
+            _isDownloading = true;
+          });
+          await Dio().download(
+              "${ApiConstants.baseUrl}download-product-pdf/${widget.product['id']}",
+              _localPath + widget.product['title'] + ".pdf",
+              onReceiveProgress: (received, total) async {
+            int percentage = ((received / total) * 100).floor();
+            // await Future.delayed(Duration(milliseconds: 100));
+            // print("${received}% ${total}");
+            setState(() {
+              _downloadButtonText =
+                  "${percentage.toInt().toString()}% Downloaded";
+            });
+          });
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              duration: Duration(seconds: 3),
+              content: Text("PDF Downloaded! See the download folder"),
+              backgroundColor: Colors.green));
+        } catch (e) {
+          print("Download Failed.\n\n" + e.toString());
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              duration: Duration(seconds: 3),
+              content: Text("Download Failed: " + e.toString()),
+              backgroundColor: Colors.redAccent));
+        }
+        await Future.delayed(Duration(seconds: 3));
+        setState(() {
+          _downloadButtonText = "Download PDF";
+          _isDownloading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(AppColors.primaryBackground),
       appBar: AppBar(
-        title: Text("My QR Code"),
+        title: Text(widget.product['title']),
         centerTitle: true,
         backgroundColor: Color(AppColors.primaryBackground),
         elevation: 0,
@@ -31,7 +127,18 @@ class MyQRCodeScreen extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(
-              height: 36,
+              height: 12,
+            ),
+            OutlinedButton(
+                onPressed: _downloadPDF,
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        Color(AppColors.primaryColorDim).withOpacity(.15)),
+                    foregroundColor: MaterialStateProperty.all(
+                        Color(AppColors.primaryColor))),
+                child: Text(_downloadButtonText)),
+            SizedBox(
+              height: 12,
             ),
             Text(
               "Share this code to receicve payments",
@@ -52,7 +159,18 @@ class MyQRCodeScreen extends StatelessWidget {
                           ' is a prototype, \nyou cannot send or\nreceive real money )'),
                 ])),
             SizedBox(
-              height: 64,
+              height: 20,
+            ),
+            Text(
+              "Rs. ${widget.product['amount']}",
+              style: TextStyle(
+                  color: Color(AppColors.primaryColor),
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 60,
             ),
             Stack(children: [
               ClipPath(
@@ -79,17 +197,14 @@ class MyQRCodeScreen extends StatelessWidget {
                       future: UserDataStorage().getUserData(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          Map<String, dynamic> userData = snapshot.data!;
                           Map<String, dynamic> qrFields = {
-                            'type': "contact",
-                            'avatar': userData['avatar'],
-                            'name': userData['first_name'] +
-                                " " +
-                                userData['last_name'],
-                            'gender': userData['gender'],
-                            'walletAddress': userData['walletAddress'],
-                            'emailAddress': userData['email'],
-                            'phoneNumber': userData['phone_number'],
+                            'type': "product",
+                            'title': widget.product['title'] ?? "",
+                            'amount': widget.product['amount'] ?? "",
+                            'banner': widget.product['banner'] ?? "",
+                            'brandName': widget.product['brand']!['name'] ?? "",
+                            'walletAddress':
+                                widget.product['walletAddress'] ?? "",
                           };
                           return QrImage(
                             data: json.encode(qrFields),
@@ -120,7 +235,7 @@ class MyQRCodeScreen extends StatelessWidget {
                             ),
                           ));
                         }
-                      }))
+                      })),
             ])
           ],
         ),

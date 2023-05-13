@@ -194,6 +194,9 @@ class _WalletScreenState extends State<WalletScreen> {
           ),
         ),
         myBankingCards,
+        SizedBox(
+          height: 35,
+        ),
       ],
     );
 
@@ -270,24 +273,20 @@ class _WalletScreenState extends State<WalletScreen> {
                 EdgeInsets.only(left: 12, top: 0, right: 0, bottom: 0),
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: ColorFiltered(
-                  colorFilter: ColorFilter.mode(
-                    Color(AppColors.primaryColorDim),
-                    BlendMode.color,
-                  ),
-                  child: ColorFiltered(
-                    colorFilter: ColorFilter.mode(
-                      Colors.grey,
-                      BlendMode.saturation,
-                    ),
-                    child: Container(
-                        color: Colors.white,
-                        child: Image.network(
-                          "${ApiConstants.baseUrl}../storage/images/hadwin_images/hadwin_payment_system/square_card_brands/${cardData[index]['cardBrand'].replaceAll(' ', '-').toLowerCase()}.png",
-                          width: 48,
-                          height: 48,
-                        )),
-                  )),
+              child: Container(
+                  child: FadeInImage.assetNetwork(
+                imageErrorBuilder: (context, error, stackTrace) => CircleAvatar(
+                  child: Icon(Icons.credit_card,
+                      color: Color(AppColors.primaryColorDim)),
+                  backgroundColor: Color(AppColors.shadowColor),
+                  radius: 24,
+                ),
+                placeholder: 'assets/images/credit-card.png',
+                image:
+                    "${ApiConstants.baseUrl}../storage/images/hadwin_images/hadwin_payment_system/square_card_brands/${cardData[index]['cardBrand'].replaceAll(' ', '-').toLowerCase()}.png",
+                width: 48,
+                height: 48,
+              )),
             ),
             title: Text(
               cardData[index]['cardBrand'],

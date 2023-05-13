@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quickpaisa/database/login_info_storage.dart';
 import 'package:quickpaisa/database/user_data_storage.dart';
+import 'package:quickpaisa/resources/colors.dart';
 
 import 'package:quickpaisa/screens/login_screen.dart';
 
@@ -25,6 +26,7 @@ void showErrorAlert(BuildContext context, Map<String, dynamic> error) {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
+        backgroundColor: Color(AppColors.secondaryBackground),
             title: Text(
               "Error",
               textAlign: TextAlign.center,
@@ -43,14 +45,14 @@ void showErrorAlert(BuildContext context, Map<String, dynamic> error) {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                        color: Colors.blueGrey.shade100,
+                        color: Color(AppColors.shadowColor),
                         offset: Offset(0, 4),
                         blurRadius: 5.0)
                   ],
-                  gradient: RadialGradient(
-                      colors: [Color(0xff0070BA), Color(0xff1546A0)],
-                      radius: 8.4,
-                      center: Alignment(-0.24, -0.36)),
+                  gradient: RadialGradient(colors: [
+                    Color(AppColors.primaryColorDim),
+                    Color(AppColors.secondaryColorDim)
+                  ], radius: 8.4, center: Alignment(-0.24, -0.36)),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ElevatedButton(

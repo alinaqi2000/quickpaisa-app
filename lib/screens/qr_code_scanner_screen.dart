@@ -40,7 +40,8 @@ class _QRCodeScannerScreenState extends State<QRCodeScannerScreen> {
         backgroundColor: Colors.transparent,
         foregroundColor: Color(AppColors.secondaryText),
         elevation: 0,
-        title: Text("Scan QR Code", style: TextStyle(color: Color(AppColors.secondaryText))),
+        title: Text("Scan QR Code",
+            style: TextStyle(color: Color(AppColors.secondaryText))),
         centerTitle: true,
       ),
       body: Column(
@@ -77,13 +78,16 @@ class _QRCodeScannerScreenState extends State<QRCodeScannerScreen> {
       try {
         final data = jsonDecode(scanData.code!);
         int validFields = {
+          "type",
+          'title',
+          'amount',
+          'banner',
           'avatar',
           'homepage',
           'name',
-          'walletAddress',
           'emailAddress',
           'phoneNumber',
-          'communicationAddress'
+          'walletAddress',
         }.intersection(data.keys.toSet()).length;
         if (validFields >= 4) {
           Navigator.push(

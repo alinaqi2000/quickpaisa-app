@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:quickpaisa/components/main_app_screen/local_splash_screen_component.dart';
@@ -18,13 +17,14 @@ import 'package:quickpaisa/providers/user_login_state_provider.dart';
 import 'package:quickpaisa/resources/colors.dart';
 import 'package:quickpaisa/screens/login_screen.dart';
 import 'package:quickpaisa/utilities/make_api_request.dart';
-import 'package:quickpaisa/screens/onboarding_screen.dart';
 
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(

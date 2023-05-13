@@ -1,11 +1,18 @@
+import 'dart:io';
+
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:quickpaisa/database/user_data_storage.dart';
 import 'package:quickpaisa/qp_components.dart';
 
 import 'package:provider/provider.dart';
 import 'package:quickpaisa/resources/colors.dart';
+import 'package:quickpaisa/screens/all_brands.dart';
 import 'package:quickpaisa/screens/all_contacts.dart';
+import 'package:quickpaisa/screens/login_screen.dart';
+import 'package:quickpaisa/screens/my_products.dart';
 import 'package:quickpaisa/screens/all_transaction_activities_screen.dart';
+import 'package:quickpaisa/database/login_info_storage.dart';
 
 class HomeDashboardScreen extends StatefulWidget {
   final Map<String, dynamic> user;
@@ -24,6 +31,7 @@ class HomeDashboardScreen extends StatefulWidget {
 
 class HomeDashboardScreenState extends State<HomeDashboardScreen> {
   List<dynamic> allTransactions = [];
+  bool fetching = true;
   late List<Map<String, dynamic>> response;
   Map<String, dynamic>? error = null;
 
@@ -102,8 +110,8 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
               Text(
                 "Rs. ${context.watch<UserLoginStateProvider>().bankBalance}",
                 style: TextStyle(
-                    color: Colors.white.withOpacity(0.90),
-                    fontSize: 36,
+                    color: Colors.white.withOpacity(0.80),
+                    fontSize: 24,
                     fontWeight: FontWeight.bold),
               ),
               SizedBox(
@@ -122,7 +130,7 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
     ];
     List<Widget> transactionButtons = <Widget>[
       Padding(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.only(left: 10, top: 10),
         child: ElevatedButton(
             onPressed: () => {
                   Navigator.push(
@@ -144,7 +152,7 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
                 Spacer(),
                 Text(
                   "My QR Code",
-                  style: TextStyle(fontSize: 13),
+                  style: TextStyle(fontSize: 11),
                 ),
                 SizedBox(
                   height: 10,
@@ -154,15 +162,15 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
             style: ElevatedButton.styleFrom(
               // primary: Color(AppColors.secondaryColor),
               primary: Color(AppColors.primaryColorDim),
-              // fixedSize: Size(90, 100),
-              fixedSize: Size(90, 90),
+              // fixedSize: Size(80, 100),
+              fixedSize: Size(80, 80),
               shadowColor: Color(AppColors.secondaryColor).withOpacity(0.618),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             )),
       ),
       Padding(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.only(left: 10, top: 10),
         child: ElevatedButton(
             onPressed: () => _makeATransaction('debit'),
             child: Column(children: [
@@ -180,23 +188,23 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
               Text(
                 "Send Money",
                 style: TextStyle(
-                    color: Color(AppColors.secondaryText), fontSize: 13),
+                    color: Color(AppColors.secondaryText), fontSize: 11),
               ),
               SizedBox(
                 height: 10,
               )
             ]),
             style: ElevatedButton.styleFrom(
-              // fixedSize: Size(90, 100),
+              // fixedSize: Size(80, 100),
               backgroundColor: Color(AppColors.secondaryBackground),
-              fixedSize: Size(90, 90),
+              fixedSize: Size(80, 80),
               shadowColor: Color(AppColors.shadowColor).withOpacity(0.618),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             )),
       ),
       Padding(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.only(left: 10, top: 10),
         child: ElevatedButton(
             onPressed: () => _makeATransaction('credit'),
             child: Column(children: [
@@ -214,16 +222,16 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
               Text(
                 "Request Money",
                 style: TextStyle(
-                    color: Color(AppColors.secondaryText), fontSize: 13),
+                    color: Color(AppColors.secondaryText), fontSize: 11),
               ),
               SizedBox(
                 height: 10,
               )
             ]),
             style: ElevatedButton.styleFrom(
-              // fixedSize: Size(90, 100),
+              // fixedSize: Size(80, 100),
               backgroundColor: Color(AppColors.secondaryBackground),
-              fixedSize: Size(90, 90),
+              fixedSize: Size(80, 80),
               shadowColor: Color(AppColors.shadowColor).withOpacity(0.618),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
@@ -234,7 +242,7 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
       //   child: ElevatedButton(
       //       onPressed: () => {
       //             Navigator.push(
-      //                     context, SlideRightRoute(page: MyQRCodeScreen()))
+      //                     context, SlideRightRoute(page: MyProductsScreen()))
       //                 .whenComplete(() => setState(() {}))
       //           },
       //       child: Column(children: [
@@ -252,16 +260,16 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
       //         Text(
       //           "My Contacts",
       //           style: TextStyle(
-      //               color: Color(AppColors.secondaryText), fontSize: 13),
+      //               color: Color(AppColors.secondaryText), fontSize: 11),
       //         ),
       //         SizedBox(
       //           height: 10,
       //         )
       //       ]),
       //       style: ElevatedButton.styleFrom(
-      //         // fixedSize: Size(90, 100),
+      //         // fixedSize: Size(80, 100),
       //         backgroundColor: Color(AppColors.secondaryBackground),
-      //         fixedSize: Size(90, 90),
+      //         fixedSize: Size(80, 80),
       //         shadowColor: Color(AppColors.shadowColor).withOpacity(0.618),
       //         shape: RoundedRectangleBorder(
       //             borderRadius: BorderRadius.circular(12)),
@@ -282,19 +290,43 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
                             userAuthKey: widget.userAuthKey ?? "")))
                 .whenComplete(() => setState(() {}));
           }
+          if (value == _ScanOptions.MyBrands) {
+            Navigator.push(
+                    context,
+                    SlideRightRoute(
+                        page: AllBrandsScreen(
+                            userAuthKey: widget.userAuthKey ?? "")))
+                .whenComplete(() => setState(() {}));
+          }
+          if (value == _ScanOptions.MyProducts) {
+            Navigator.push(
+                context,
+                SlideRightRoute(
+                    page: MyProductsScreen(
+                        userAuthKey: widget.userAuthKey ?? "")));
+            //       .whenComplete(() => setState(() {}));
+          }
           // else {
-          //   Navigator.push(context, SlideRightRoute(page: MyQRCodeScreen()))
+          //   Navigator.push(context, SlideRightRoute(page: MyProductsScreen()))
           //       .whenComplete(() => setState(() {}));
           // }
         },
         itemBuilder: (context) => [
+          PopupMenuItem(
+            child: Text("My Brands"),
+            value: _ScanOptions.MyBrands,
+          ),
+          PopupMenuItem(
+            child: Text("My Products"),
+            value: _ScanOptions.MyProducts,
+          ),
           PopupMenuItem(
             child: Text("My Contacts"),
             value: _ScanOptions.MyContacts,
           ),
           // PopupMenuItem(
           //   child: Text("My QR Code"),
-          //   value: _ScanOptions.MyQRCode,
+          //   value: _ScanOptions.MyProducts,
           // )
         ],
       )
@@ -319,7 +351,7 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
       Expanded(
           flex: 1,
           child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 15),
+              padding: EdgeInsets.symmetric(horizontal: 10),
               height: 150,
               child: Column(
                 children: <Widget>[
@@ -346,7 +378,8 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
                   ),
                   Expanded(
                     child: Container(
-                      height: 145,
+                      height: 200,
+                      margin: EdgeInsets.only(bottom: 35),
                       child: Builder(builder: _buildTransactionActivities),
                     ),
                   )
@@ -387,12 +420,16 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
           .addPostFrameCallback((_) => showErrorAlert(context, error!));
 
       return activitiesLoadingList(10);
-    } else if (allTransactions.isEmpty) {
+    } else if (fetching) {
       return activitiesLoadingList(4);
     } else if (error == null) {
-      List<dynamic> currentTransactions =
-          List.from(allTransactions).sublist(0, 4);
-
+      if (allTransactions.isEmpty) {
+        return Center(
+          child: Text('no matches found'),
+        );
+      }
+      List<dynamic> currentTransactions = List.from(allTransactions)
+          .sublist(0, allTransactions.length < 4 ? allTransactions.length : 4);
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: 15),
         child: ListView.separated(
@@ -478,15 +515,14 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
                     currentTransactions[index]['transactionMemberName'][0]
                         .toUpperCase(),
                     style: TextStyle(
-                        fontSize: 20,
-                        color: Color(AppColors.secondaryColorDim)),
+                        fontSize: 20, color: Color(AppColors.primaryColorDim)),
                   );
                 }
               },
             );
 
             return Container(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(2),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 boxShadow: <BoxShadow>[
@@ -514,7 +550,7 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
                 title: Text(
                   currentTransactions[index]['transactionMemberName'],
                   style: TextStyle(
-                      fontSize: 16.5,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold,
                       color: Color(AppColors.secondaryColorDim)),
                 ),
@@ -525,21 +561,25 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
                         currentTransactions[index]['dateGroup'],
                         DateTime.parse(
                             currentTransactions[index]['transactionDate'])),
-                    style: TextStyle(fontSize: 12, color: Color(0xff929BAB)),
+                    style: TextStyle(
+                        fontSize: 10, color: Color(AppColors.secondaryText)),
                   ),
                 ),
-                trailing: Text(
-                  currentTransactions[index]['transactionType'] == "credit"
-                      ? "+ Rs. ${currentTransactions[index]['transactionAmount'].toString()}"
-                      : "- Rs. ${currentTransactions[index]['transactionAmount'].toString()}",
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: currentTransactions[index]['transactionType'] ==
-                              "credit"
-                          ? Colors.greenAccent
-                          : Colors.redAccent),
-                ),
+                trailing: Padding(
+                    padding: EdgeInsets.only(right: 2),
+                    child: Text(
+                      currentTransactions[index]['transactionType'] == "credit"
+                          ? "+ Rs. ${currentTransactions[index]['transactionAmount'].toString()}"
+                          : "- Rs. ${currentTransactions[index]['transactionAmount'].toString()}",
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: currentTransactions[index]
+                                      ['transactionType'] ==
+                                  "credit"
+                              ? Colors.greenAccent
+                              : Colors.redAccent),
+                    )),
                 onTap: _viewAllActivities,
               ),
             );
@@ -578,34 +618,86 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
     });
   }
 
-  void getTransactionsFromApi() async {
-    response = await Future.wait([
-      getData(
-          // urlPath: "/hadwin/v1/all-transactions", authKey: widget.userAuthKey!),
-          urlPath: "all-transactions",
-          authKey: widget.userAuthKey!),
-      SuccessfulTransactionsStorage().getSuccessfulTransactions()
-    ]);
+  Future<bool> _saveLoggedInUserData(Map<String, dynamic> user) async {
+    try {
+      final userIsSaved =
+          await Future.wait([UserDataStorage().saveUserData(user)]);
 
-    if (response[0].keys.join().toLowerCase().contains("error") ||
-        response[1].keys.join().toLowerCase().contains("error")) {
-      setState(() {
-        error = response[0].keys.join().toLowerCase().contains("error")
-            ? response[0]
-            : response[1];
-      });
-    } else {
       if (mounted) {
-        setState(() {
-          allTransactions = [
-            ...response[0]['transactions'],
-            ...response[1]['transactions']
-          ];
-        });
-        _updateTransactions();
+        Provider.of<UserLoginStateProvider>(context, listen: false)
+            .initializeBankBalance(user);
+        if (userIsSaved[0] && userIsSaved[1]) {
+          debugPrint("user data saved");
+        }
       }
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> _deleteLoggedInUserData() async {
+    List<bool> deletionStatus = await Future.wait(
+        [LoginInfoStorage().deleteFile(), UserDataStorage().deleteFile()]);
+    return deletionStatus.first && deletionStatus.last;
+  }
+
+  void _logOut() async {
+    bool logOutStatus = await _deleteLoggedInUserData();
+    if (logOutStatus) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+          (route) => false);
+    }
+  }
+
+  void getTransactionsFromApi() async {
+    try {
+      setState(() {
+        fetching = true;
+      });
+      response = await Future.wait([
+        getData(
+            // urlPath: "/hadwin/v1/all-transactions", authKey: widget.userAuthKey!),
+            urlPath: "all-transactions",
+            authKey: widget.userAuthKey!),
+        SuccessfulTransactionsStorage().getSuccessfulTransactions(),
+      ]);
+      final dataReceived = await getData(
+          // urlPath: "/hadwin/v1/all-transactions", authKey: widget.userAuthKey!),
+          urlPath: "auth/verify",
+          authKey: widget.userAuthKey);
+
+      if (dataReceived.keys.join().toLowerCase().contains("error")) {
+        return _logOut();
+      }
+      await Future.wait([_saveLoggedInUserData(dataReceived['user'])]);
+
+      if (response[0].keys.join().toLowerCase().contains("error") ||
+          response[1].keys.join().toLowerCase().contains("error")) {
+        setState(() {
+          error = response[0].keys.join().toLowerCase().contains("error")
+              ? response[0]
+              : response[1];
+          fetching = false;
+        });
+      } else {
+        if (mounted) {
+          setState(() {
+            allTransactions = [
+              ...response[0]['transactions'],
+              ...response[1]['transactions']
+            ];
+            fetching = false;
+          });
+          _updateTransactions();
+        }
+      }
+    } on SocketException {
+      return _logOut();
     }
   }
 }
 
-enum _ScanOptions { MyContacts, MyQRCode }
+enum _ScanOptions { MyContacts, MyBrands, MyProducts }

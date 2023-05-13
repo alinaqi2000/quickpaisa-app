@@ -8,7 +8,7 @@ Widget _contactLoadingTile() {
       Container(
         child: FadeShimmer.round(
           size: 72,
-          fadeTheme: FadeTheme.light,
+          fadeTheme: FadeTheme.dark,
         ),
         padding: EdgeInsets.all(5),
       ),
@@ -18,7 +18,7 @@ Widget _contactLoadingTile() {
             child: FadeShimmer(
               height: 21,
               width: 200,
-              fadeTheme: FadeTheme.light,
+              fadeTheme: FadeTheme.dark,
             ),
             padding: EdgeInsets.all(5),
           ),
@@ -26,7 +26,7 @@ Widget _contactLoadingTile() {
             child: FadeShimmer(
               height: 18,
               width: 180,
-              fadeTheme: FadeTheme.light,
+              fadeTheme: FadeTheme.dark,
             ),
             padding: EdgeInsets.all(5),
           )

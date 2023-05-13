@@ -7,10 +7,14 @@ import 'package:quickpaisa/providers/live_transactions_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:quickpaisa/qp_components.dart';
 import 'package:quickpaisa/resources/colors.dart';
+import 'package:share_files_and_screenshot_widgets/share_files_and_screenshot_widgets.dart';
 
 class TransactionReceiptScreen extends StatelessWidget {
   final Map<String, dynamic> transactionReceipt;
   final String transactionStatus;
+  final GlobalKey previewContainer = new GlobalKey();
+  final int originalSize = 800;
+
   TransactionReceiptScreen(
       {Key? key,
       required this.transactionReceipt,
@@ -28,9 +32,9 @@ class TransactionReceiptScreen extends StatelessWidget {
 
     TextStyle _receiptHeaders = GoogleFonts.lato(
         color: Color(AppColors.secondaryColorDim),
-        fontSize: screenWidth < 380 ? 12 : 14);
+        fontSize: screenWidth < 380 ? 11 : 13);
     TextStyle _receiptValues = GoogleFonts.chivo(
-        fontSize: screenWidth < 380 ? 14 : 16,
+        fontSize: screenWidth < 380 ? 12 : 14,
         color: Color(AppColors.secondaryText),
         fontWeight: FontWeight.bold);
     final _imageURL = transactionReceipt['transactionMemberAvatar']
@@ -129,303 +133,348 @@ class TransactionReceiptScreen extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(
-                  height: 90,
+                  height: 60,
                 ),
-                Stack(
-                  alignment: Alignment.center,
-                  clipBehavior: Clip.none,
-                  children: [
-                    ClipPath(
-                      clipper: ReceiptClipper(),
-                      child: Container(
-                        // height: MediaQuery.of(context).size.height -36,
-                        height: 618,
-                        width: screenWidth - 72,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(7),
-                          color: Color(AppColors.secondaryBackground),
-                        ),
-                      ),
-                    ),
-
-                    Positioned(
-                        top: -36,
-                        child: CircleAvatar(
-                          backgroundColor: Color(AppColors.primaryBackground),
-                          radius: 44,
-                          child: CircleAvatar(
-                            child: Image.asset(
-                              'assets/images/checkmark.png',
-                            ),
-                            radius: 36,
-                          ),
-                        )),
-
-                    Positioned(
-                      top: 155,
-                      child: DottedLine(
-                        direction: Axis.horizontal,
-                        lineLength: screenWidth - 120,
-                        lineThickness: 2.4,
-                        dashLength: 12,
-                        dashColor: Color(AppColors.primaryBackground),
-                        dashRadius: 0.0,
-                        dashGapLength: 3.0,
-                        dashGapColor: Colors.transparent,
-                        dashGapRadius: 0.0,
-                      ),
-                    ),
-
-                    //? RECEIPT HEADER ↴
-                    Positioned(
-                        top: 70,
-                        child: Wrap(
-                          direction: Axis.vertical,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          spacing: 3.6,
-                          children: [
-                            Text(
-                                transactionReceipt['transactionType'] == 'debit'
-                                    ? 'Money Sent!'
-                                    : "Money Received!",
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.heebo(
-                                    fontSize: 24,
-                                    color: Color(AppColors.primaryColor),
-                                    fontWeight: FontWeight.bold)),
-                            Text(
-                              'Your transaction was successful',
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.sarabun(
-                                color: Color(AppColors.secondaryText),
-                              ),
-                            )
-                          ],
-                        )),
-
-                    //? RECEIPT BODY ↴
-                    Positioned(
-                        top: 200,
-                        child: Container(
-                          width: screenWidth - 120,
-                          color: Colors.transparent,
-                          child: Wrap(
-                            direction: Axis.vertical,
-                            spacing: 24,
-                            children: [
-                              //? DATE AND TIME OF TRANSACTION ↴
-                              Container(
-                                width: screenWidth - 120,
-                                color: Colors.transparent,
-                                child: Wrap(
-                                  direction: Axis.horizontal,
-                                  alignment: WrapAlignment.spaceBetween,
-                                  children: [
-                                    Wrap(
-                                      direction: Axis.vertical,
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.start,
-                                      spacing: 3.6,
-                                      children: [
-                                        Text('DATE', style: _receiptHeaders),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              2.4,
-                                          child: Text(
-                                            dateToWords(DateTime.parse(
-                                                transactionReceipt[
-                                                    'transactionDate'])),
-                                            style: _receiptValues,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Wrap(
-                                      direction: Axis.vertical,
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.end,
-                                      spacing: 3.6,
-                                      children: [
-                                        Text(
-                                          'TIME',
-                                          style: _receiptHeaders,
-                                        ),
-                                        Text(
-                                          formatTime3(transactionReceipt[
-                                              'transactionDate']),
-                                          style: _receiptValues,
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              //? INFO AND SENDER OR RECEIPIENT ↴
-                              Container(
-                                width: screenWidth - 120,
-                                color: Colors.transparent,
-                                child: Wrap(
-                                  direction: Axis.horizontal,
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  alignment: WrapAlignment.spaceBetween,
-                                  children: [
-                                    Wrap(
-                                      direction: Axis.vertical,
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.start,
-                                      spacing: 3.6,
-                                      children: [
-                                        Text(
-                                            transactionReceipt[
-                                                        'transactionType'] ==
-                                                    'debit'
-                                                ? 'TO'
-                                                : 'FROM',
-                                            style: _receiptHeaders),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              2.4,
-                                          child: Text(
-                                            _formatParticipantName(
-                                                transactionReceipt[
-                                                    'transactionMemberName']),
-                                            style: _receiptValues,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2.4,
-                                            child: Text(
-                                              transactionReceipt.containsKey(
-                                                      'transactionMemberBusinessWebsite')
-                                                  ? transactionReceipt[
-                                                      'transactionMemberBusinessWebsite']
-                                                  : transactionReceipt.containsKey(
-                                                          'transactionMemberEmail')
-                                                      ? transactionReceipt[
-                                                          'transactionMemberEmail']
-                                                      : 'contact details unavailable',
-                                              style: GoogleFonts.sarabun(
-                                                  color: Color(
-                                                      AppColors.secondaryText),
-                                                  fontSize: 12),
-                                            ))
-                                      ],
-                                    ),
-                                    Wrap(
-                                      direction: Axis.vertical,
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.end,
-                                      spacing: 3.6,
-                                      children: [
-                                        CircleAvatar(
-                                            radius: 30,
-                                            backgroundColor:
-                                                Color(AppColors.shadowColor),
-                                            child: transactionMemberImage),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              //? TRANSACTION AMOUNT ---  ↔  --- TRANSACTION STATUS ↴
-                              Container(
-                                width: screenWidth - 120,
-                                color: Colors.transparent,
-                                child: Wrap(
-                                  direction: Axis.horizontal,
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  alignment: WrapAlignment.spaceBetween,
-                                  children: [
-                                    Wrap(
-                                      direction: Axis.vertical,
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.start,
-                                      spacing: 3.6,
-                                      children: [
-                                        Text('AMOUNT', style: _receiptHeaders),
-                                        Text(
-                                          'Rs. ${transactionReceipt['transactionAmount']}',
-                                          style: GoogleFonts.oswald(
-                                              fontSize: 24,
-                                              color: transactionReceipt[
-                                                          'transactionType'] ==
-                                                      'debit'
-                                                  ? Colors.redAccent
-                                                  : Colors.greenAccent,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ],
-                                    ),
-                                    Wrap(
-                                      direction: Axis.vertical,
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.end,
-                                      spacing: 3.6,
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.all(7.2),
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.greenAccent),
-                                              borderRadius:
-                                                  BorderRadius.circular(6.18)),
-                                          child: Text(
-                                            'COMPLETED',
-                                            style: GoogleFonts.quicksand(
-                                                color: Colors.greenAccent,
-                                                fontSize: 12.84),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
-                    Positioned(
-                        bottom: 14,
-                        child: Container(
-                            height: 100,
-                            width: screenWidth - 96,
+                RepaintBoundary(
+                  key: previewContainer,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      clipBehavior: Clip.none,
+                      children: [
+                        ClipPath(
+                          clipper: ReceiptClipper(),
+                          child: Container(
+                            // height: MediaQuery.of(context).size.height -36,
+                            height: 550,
+                            width: screenWidth - 72,
                             decoration: BoxDecoration(
-                                color: Color(AppColors.shadowColor)
-                                    .withOpacity(0.618),
-                                borderRadius: BorderRadius.circular(7)),
-                            // child: Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: FutureBuilder<Map<String, dynamic>>(
-                              future: CardsStorage().randomCard,
-                              builder: _financialInstrumentsBuilder,
-                            )
-                            // ),
-                            ))
-                  ],
-                ),
-                SizedBox(
-                  height: 48,
-                ),
-                FloatingActionButton(
-                  elevation: 0,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Icon(
-                    Icons.close,
-                    color: Colors.white,
+                              borderRadius: BorderRadius.circular(7),
+                              color: Color(AppColors.secondaryBackground),
+                            ),
+                          ),
+                        ),
+
+                        Positioned(
+                            top: -36,
+                            child: CircleAvatar(
+                              backgroundColor:
+                                  Color(AppColors.primaryBackground),
+                              radius: 44,
+                              child: CircleAvatar(
+                                child: Image.asset(
+                                  'assets/images/checkmark.png',
+                                ),
+                                radius: 36,
+                              ),
+                            )),
+
+                        Positioned(
+                          top: 155,
+                          child: DottedLine(
+                            direction: Axis.horizontal,
+                            lineLength: screenWidth - 120,
+                            lineThickness: 2.4,
+                            dashLength: 12,
+                            dashColor: Color(AppColors.primaryBackground),
+                            dashRadius: 0.0,
+                            dashGapLength: 3.0,
+                            dashGapColor: Colors.transparent,
+                            dashGapRadius: 0.0,
+                          ),
+                        ),
+
+                        //? RECEIPT HEADER ↴
+                        Positioned(
+                            top: 60,
+                            child: Wrap(
+                              direction: Axis.vertical,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              spacing: 3.6,
+                              children: [
+                                Text(
+                                    transactionReceipt['transactionType'] ==
+                                            'debit'
+                                        ? 'Money Sent!'
+                                        : "Money Received!",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.heebo(
+                                        fontSize: 20,
+                                        color: Color(AppColors.primaryColor),
+                                        fontWeight: FontWeight.bold)),
+                                Text("Transaction ID"),
+                                SelectableText(
+                                    "${transactionReceipt['transactionID']}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold)),
+                              ],
+                            )),
+
+                        //? RECEIPT BODY ↴
+                        Positioned(
+                            top: 200,
+                            child: Container(
+                              width: screenWidth - 120,
+                              color: Colors.transparent,
+                              child: Wrap(
+                                direction: Axis.vertical,
+                                spacing: 24,
+                                children: [
+                                  //? DATE AND TIME OF TRANSACTION ↴
+                                  Container(
+                                    width: screenWidth - 120,
+                                    color: Colors.transparent,
+                                    child: Wrap(
+                                      direction: Axis.horizontal,
+                                      alignment: WrapAlignment.spaceBetween,
+                                      children: [
+                                        Wrap(
+                                          direction: Axis.vertical,
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.start,
+                                          spacing: 3.6,
+                                          children: [
+                                            Text('DATE',
+                                                style: _receiptHeaders),
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2.4,
+                                              child: Text(
+                                                dateToWords(DateTime.parse(
+                                                    transactionReceipt[
+                                                        'transactionDate'])),
+                                                style: _receiptValues,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Wrap(
+                                          direction: Axis.vertical,
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.end,
+                                          spacing: 3.6,
+                                          children: [
+                                            Text(
+                                              'TIME',
+                                              style: _receiptHeaders,
+                                            ),
+                                            Text(
+                                              formatTime3(transactionReceipt[
+                                                  'transactionDate']),
+                                              style: _receiptValues,
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  //? INFO AND SENDER OR RECEIPIENT ↴
+                                  Container(
+                                    width: screenWidth - 120,
+                                    color: Colors.transparent,
+                                    child: Wrap(
+                                      direction: Axis.horizontal,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      alignment: WrapAlignment.spaceBetween,
+                                      children: [
+                                        Wrap(
+                                          direction: Axis.vertical,
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.start,
+                                          spacing: 3.6,
+                                          children: [
+                                            Text(
+                                                transactionReceipt[
+                                                            'transactionType'] ==
+                                                        'debit'
+                                                    ? 'TO'
+                                                    : 'FROM',
+                                                style: _receiptHeaders),
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2.4,
+                                              child: Text(
+                                                _formatParticipantName(
+                                                    transactionReceipt[
+                                                        'transactionMemberName']),
+                                                style: _receiptValues,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.4,
+                                                child: Text(
+                                                  transactionReceipt.containsKey(
+                                                          'transactionMemberBusinessWebsite')
+                                                      ? transactionReceipt[
+                                                          'transactionMemberBusinessWebsite']
+                                                      : transactionReceipt
+                                                              .containsKey(
+                                                                  'transactionMemberEmail')
+                                                          ? transactionReceipt[
+                                                              'transactionMemberEmail']
+                                                          : transactionReceipt
+                                                                  .containsKey(
+                                                                      'transactionMemberPhoneNumber')
+                                                              ? transactionReceipt[
+                                                                  'transactionMemberPhoneNumber']
+                                                              : 'contact details unavailable',
+                                                  style: GoogleFonts.sarabun(
+                                                      color: Color(AppColors
+                                                          .secondaryText),
+                                                      fontSize: 12),
+                                                ))
+                                          ],
+                                        ),
+                                        Wrap(
+                                          direction: Axis.vertical,
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.end,
+                                          spacing: 3.6,
+                                          children: [
+                                            CircleAvatar(
+                                                radius: 24,
+                                                backgroundColor: Color(
+                                                    AppColors.shadowColor),
+                                                child: transactionMemberImage),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  //? TRANSACTION AMOUNT ---  ↔  --- TRANSACTION STATUS ↴
+                                  Container(
+                                    width: screenWidth - 120,
+                                    color: Colors.transparent,
+                                    child: Wrap(
+                                      direction: Axis.horizontal,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      alignment: WrapAlignment.spaceBetween,
+                                      children: [
+                                        Wrap(
+                                          direction: Axis.vertical,
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.start,
+                                          spacing: 3.6,
+                                          children: [
+                                            Text('AMOUNT',
+                                                style: _receiptHeaders),
+                                            Text(
+                                              'Rs. ${transactionReceipt['transactionAmount']}',
+                                              style: GoogleFonts.oswald(
+                                                  fontSize: 24,
+                                                  color: transactionReceipt[
+                                                              'transactionType'] ==
+                                                          'debit'
+                                                      ? Colors.redAccent
+                                                      : Colors.greenAccent,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ],
+                                        ),
+                                        Wrap(
+                                          direction: Axis.vertical,
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.end,
+                                          spacing: 3.6,
+                                          children: [
+                                            Container(
+                                              padding: EdgeInsets.all(7.2),
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color:
+                                                          Colors.greenAccent),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          6.18)),
+                                              child: Text(
+                                                'COMPLETED',
+                                                style: GoogleFonts.quicksand(
+                                                    color: Colors.greenAccent,
+                                                    fontSize: 12.84),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )),
+                        Positioned(
+                            bottom: 14,
+                            child: Container(
+                                height: 100,
+                                width: screenWidth - 96,
+                                decoration: BoxDecoration(
+                                    color: Color(AppColors.shadowColor)
+                                        .withOpacity(0.618),
+                                    borderRadius: BorderRadius.circular(7)),
+                                // child: Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: FutureBuilder<Map<String, dynamic>>(
+                                  future: CardsStorage().randomCard,
+                                  builder: _financialInstrumentsBuilder,
+                                )
+                                // ),
+                                ))
+                      ],
+                    ),
                   ),
-                  backgroundColor: Colors.white24,
                 ),
-                SizedBox(
-                  height: 48,
+                Flex(
+                  direction: Axis.horizontal,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(6),
+                      child: FloatingActionButton(
+                        elevation: 0,
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Icon(
+                          Icons.close,
+                          color: Color(AppColors.secondaryText),
+                        ),
+                        backgroundColor: Color(AppColors.secondaryBackground),
+                      ),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.all(6),
+                        child: FloatingActionButton(
+                          elevation: 0,
+                          onPressed: () {
+                            ShareFilesAndScreenshotWidgets().shareScreenshot(
+                                previewContainer,
+                                originalSize,
+                                "${transactionReceipt['transactionID']}",
+                                "Name.png",
+                                "image/png",
+                                text:
+                                    "Transaction ID: \n${transactionReceipt['transactionID']}");
+                          },
+                          child: Icon(
+                            Icons.share,
+                            color: Color(AppColors.secondaryText),
+                          ),
+                          backgroundColor: Color(AppColors.secondaryBackground),
+                        )),
+                    SizedBox(
+                      height: 48,
+                    )
+                  ],
                 )
               ],
             ),
@@ -458,8 +507,16 @@ class TransactionReceiptScreen extends StatelessWidget {
         children: [
           Container(
             margin: EdgeInsets.only(left: 8.4),
-            child: Image.network(
-              "${ApiConstants.baseUrl}../storage/images/hadwin_images/hadwin_payment_system/square_card_brands/${cardUsedInTransaction['cardBrand'].replaceAll(' ', '-').toLowerCase()}.png",
+            child: FadeInImage.assetNetwork(
+              placeholder: 'assets/images/credit-card.png',
+              imageErrorBuilder: (context, error, stackTrace) => CircleAvatar(
+                child: Icon(Icons.credit_card,
+                    color: Color(AppColors.primaryColorDim)),
+                backgroundColor: Color(AppColors.shadowColor),
+                radius: 24,
+              ),
+              image:
+                  "${ApiConstants.baseUrl}../storage/images/hadwin_images/hadwin_payment_system/square_card_brands/${cardUsedInTransaction['cardBrand'].replaceAll(' ', '-').toLowerCase()}.png",
               height: 72,
               width: 72,
             ),
@@ -497,7 +554,7 @@ class TransactionReceiptScreen extends StatelessWidget {
         direction: Axis.horizontal,
         children: [
           Image.asset(
-            'assets/images/piggy-bank.png',
+            'assets/images/credit-card.png',
             height: 48,
             width: 48,
           ),
