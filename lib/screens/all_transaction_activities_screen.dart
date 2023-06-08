@@ -178,7 +178,7 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
         extendBodyBehindAppBar: true,
         body: Column(children: <Widget>[
           SizedBox(
-            height: 96,
+            height: 110,
           ),
           Container(
             decoration: BoxDecoration(
@@ -409,13 +409,8 @@ class AllTransactionActivitiesState extends State<AllTransactionActivities> {
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  /*
-                                  color: Color(AppColors.secondaryBackground),
-                                  blurRadius: 4,
-                                  offset: Offset(0.0, 3),
-                                  spreadRadius: 0
-                                  */
-                                  color: Color(0xff1546a0).withOpacity(0.1),
+                                  color: Color(AppColors.primaryColor)
+                                      .withOpacity(0.1),
                                   blurRadius: 48,
                                   offset: Offset(2, 8),
                                   spreadRadius: -16),

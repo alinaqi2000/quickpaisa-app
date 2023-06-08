@@ -11,6 +11,10 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:quickpaisa/resources/colors.dart';
 import 'package:dio/dio.dart';
 import 'package:quickpaisa/qp_components.dart';
+import 'package:slug_it/slug_it.dart';
+import 'package:intl/intl.dart'; // for date format
+import 'package:file_manager/file_manager.dart'; // for date format
+import 'package:open_file_plus/open_file_plus.dart';
 
 class ProductQRCodeScreen extends StatefulWidget {
   final dynamic product;
@@ -26,6 +30,8 @@ class _ProductQRCodeScreen extends State<ProductQRCodeScreen> {
   bool _isDownloading = false;
   String _localPath = "";
   bool _permissionReady = false;
+  String fileName = "";
+  final FileManagerController controller = FileManagerController();
 
   Future<String?> _findLocalPath() async {
     if (Platform.isAndroid) {
@@ -74,9 +80,14 @@ class _ProductQRCodeScreen extends State<ProductQRCodeScreen> {
             _downloadButtonText = "Generating PDF...";
             _isDownloading = true;
           });
+          String titleSlug = SlugIT().makeSlug(widget.product['title']);
+          fileName = titleSlug +
+              "-" +
+              DateFormat('yyyy-MM-dd-hh-mm-ss').format(DateTime.now()) +
+              ".pdf";
           await Dio().download(
               "${ApiConstants.baseUrl}download-product-pdf/${widget.product['id']}",
-              _localPath + widget.product['title'] + ".pdf",
+              _localPath + fileName,
               onReceiveProgress: (received, total) async {
             int percentage = ((received / total) * 100).floor();
             // await Future.delayed(Duration(milliseconds: 100));
@@ -86,10 +97,36 @@ class _ProductQRCodeScreen extends State<ProductQRCodeScreen> {
                   "${percentage.toInt().toString()}% Downloaded";
             });
           });
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              duration: Duration(seconds: 3),
-              content: Text("PDF Downloaded! See the download folder"),
-              backgroundColor: Colors.green));
+          final status = await Permission.storage.status;
+          if (status != PermissionStatus.granted) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                duration: Duration(seconds: 3),
+                content: Text("PDF Downloaded! See the download folder"),
+                backgroundColor: Colors.green));
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                duration: Duration(seconds: 5),
+                content: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: 4),
+                      child: Text("PDF Downloaded!"),
+                    ),
+                    InkWell(
+                      child: Text(
+                        "Open File",
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            decorationThickness: 1),
+                      ),
+                      onTap: () {
+                        OpenFile.open(_localPath + fileName);
+                      },
+                    )
+                  ],
+                ),
+                backgroundColor: Colors.green));
+          }
         } catch (e) {
           print("Download Failed.\n\n" + e.toString());
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

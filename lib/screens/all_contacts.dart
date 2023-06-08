@@ -322,13 +322,8 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
-                            /*
-                            color: Color(0xffF5F7FA),
-                            blurRadius: 4,
-                            offset: Offset(0.0, 3),
-                            spreadRadius: 0
-                            */
-                            color: Color(0xff1546a0).withOpacity(0.1),
+                            color:
+                                Color(AppColors.primaryColor).withOpacity(0.1),
                             blurRadius: 48,
                             offset: Offset(2, 8),
                             spreadRadius: -16),

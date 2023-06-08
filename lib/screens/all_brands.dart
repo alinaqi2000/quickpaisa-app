@@ -392,7 +392,8 @@ class _AllBrandsScreenState extends State<AllBrandsScreen> {
                     brandImage = Text(
                       data[index]['name'][0].toUpperCase(),
                       style: TextStyle(
-                          fontSize: 20, color: Color(AppColors.secondaryColor)),
+                          fontSize: 20,
+                          color: Color(AppColors.primaryColorDim)),
                     );
                   }
 
@@ -404,13 +405,8 @@ class _AllBrandsScreenState extends State<AllBrandsScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
-                            /*
-                            color: Color(0xffF5F7FA),
-                            blurRadius: 4,
-                            offset: Offset(0.0, 3),
-                            spreadRadius: 0
-                            */
-                            color: Color(0xff1546a0).withOpacity(0.1),
+                            color:
+                                Color(AppColors.primaryColor).withOpacity(0.1),
                             blurRadius: 48,
                             offset: Offset(2, 8),
                             spreadRadius: -16),
@@ -435,7 +431,8 @@ class _AllBrandsScreenState extends State<AllBrandsScreen> {
                           child: Text(
                             tileSubtitle,
                             style: TextStyle(
-                                fontSize: 11, color: Color(AppColors.secondaryText)),
+                                fontSize: 11,
+                                color: Color(AppColors.secondaryText)),
                           )),
                       horizontalTitleGap: 18,
                       onLongPress: () =>

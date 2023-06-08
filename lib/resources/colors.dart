@@ -5,7 +5,7 @@ class AppColors {
   static const secondaryColorDim = 0xff0081CC;
 
   static const primaryBackground = 0xff000000;
-  static const secondaryBackground = 0xff181818;
+  static const secondaryBackground = 0xff111111;
 
   static const primaryText = 0xffffffff;
   static const secondaryText = 0xffdddddd;

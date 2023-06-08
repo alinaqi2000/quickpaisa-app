@@ -196,25 +196,18 @@ class _AddBrandScreenState extends State<AddBrandScreen> {
               margin: EdgeInsets.all(5),
               padding: EdgeInsets.all(5),
               decoration: BoxDecoration(
-                  color: Color(AppColors.secondaryBackground),
-                  border: Border.all(
-                      width: 1.0, color: Color(AppColors.shadowColor)),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                        blurRadius: 6.18,
-                        spreadRadius: 0.618,
-                        offset: Offset(-4, -4),
-                        // color: Colors.white38
-                        color: Color(AppColors.shadowColor)),
-                    BoxShadow(
-                        blurRadius: 6.18,
-                        spreadRadius: 0.618,
-                        offset: Offset(4, 4),
-                        color: Color(AppColors.shadowColor)
-                        // color: Color(0xFFF5F7FA)
-                        )
-                  ]),
+                color: Color(AppColors.secondaryBackground),
+                border:
+                    Border.all(width: 1.0, color: Color(AppColors.shadowColor)),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                      color: Color(AppColors.primaryColor).withOpacity(0.1),
+                      blurRadius: 48,
+                      offset: Offset(2, 8),
+                      spreadRadius: -16),
+                ],
+              ),
             ),
             if (errorMessage1 != '')
               Container(
@@ -254,25 +247,18 @@ class _AddBrandScreenState extends State<AddBrandScreen> {
               margin: EdgeInsets.all(5),
               padding: EdgeInsets.all(5),
               decoration: BoxDecoration(
-                  color: Color(AppColors.secondaryBackground),
-                  border: Border.all(
-                      width: 1.0, color: Color(AppColors.shadowColor)),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                        blurRadius: 6.18,
-                        spreadRadius: 0.618,
-                        offset: Offset(-4, -4),
-                        // color: Colors.white38
-                        color: Color(AppColors.shadowColor)),
-                    BoxShadow(
-                        blurRadius: 6.18,
-                        spreadRadius: 0.618,
-                        offset: Offset(4, 4),
-                        color: Color(AppColors.shadowColor)
-                        // color: Color(0xFFF5F7FA)
-                        )
-                  ]),
+                color: Color(AppColors.secondaryBackground),
+                border:
+                    Border.all(width: 1.0, color: Color(AppColors.shadowColor)),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                      color: Color(AppColors.primaryColor).withOpacity(0.1),
+                      blurRadius: 48,
+                      offset: Offset(2, 8),
+                      spreadRadius: -16),
+                ],
+              ),
             ),
             if (errorMessage2 != '')
               Container(

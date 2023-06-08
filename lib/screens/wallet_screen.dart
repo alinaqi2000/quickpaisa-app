@@ -55,14 +55,14 @@ class _WalletScreenState extends State<WalletScreen> {
             bottom: -60,
             child: CircleAvatar(
               backgroundColor: Color(AppColors.secondaryBackground),
-              radius: 64,
+              radius: 60,
               child: ClipOval(
                 child: Image.network(
                   // "${ApiConstants.baseUrl}../storage/images/hadwin_images/hadwin_users/${widget.user['gender'].toLowerCase()}/${widget.user['avatar']}",
                   "${widget.user['avatar']}",
-                  height: 120,
-                  width: 120,
-                  fit: BoxFit.cover,
+                  height: 115,
+                  width: 115,
+                  fit: BoxFit.contain,
                 ),
               ),
             ))
@@ -158,7 +158,7 @@ class _WalletScreenState extends State<WalletScreen> {
     Widget myBankingCards = Expanded(
       child: Container(
           height: 100,
-          padding: EdgeInsets.symmetric(horizontal: 28),
+          padding: EdgeInsets.symmetric(horizontal: 15),
           child: FutureBuilder<Map<String, dynamic>>(
             future: availableCards.readAvailableCards(),
             builder: _buildAvailableCards,
@@ -176,18 +176,19 @@ class _WalletScreenState extends State<WalletScreen> {
           height: 20,
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 28, vertical: 10),
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Row(
             children: [
               Text(
                 "My Cards",
-                style: TextStyle(color: Color(AppColors.secondaryText)),
+                style: TextStyle(
+                    fontSize: 14, color: Color(AppColors.secondaryText)),
               ),
               Spacer(),
               InkWell(
                   child: Text(
                     "+ Add",
-                    style: TextStyle(color: Color(AppColors.secondaryText)),
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                   onTap: goToAddCardScreen)
             ],
@@ -249,18 +250,12 @@ class _WalletScreenState extends State<WalletScreen> {
       return ListView.separated(
         padding: EdgeInsets.all(0),
         itemBuilder: (_, index) => Container(
-          padding: EdgeInsets.all(5),
+          padding: EdgeInsets.symmetric(vertical: 5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                  /*
-                  color: Color(0xffF5F7FA),
-                  blurRadius: 4,
-                  offset: Offset(0.0, 3),
-                  spreadRadius: 0
-                  */
-                  color: Color(AppColors.primaryColorDim).withOpacity(0.1),
+                  color: Color(AppColors.primaryColor).withOpacity(0.1),
                   blurRadius: 48,
                   offset: Offset(2, 8),
                   spreadRadius: -16),
@@ -278,7 +273,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 imageErrorBuilder: (context, error, stackTrace) => CircleAvatar(
                   child: Icon(Icons.credit_card,
                       color: Color(AppColors.primaryColorDim)),
-                  backgroundColor: Color(AppColors.shadowColor),
+                  backgroundColor: Color(AppColors.primaryColorDim),
                   radius: 24,
                 ),
                 placeholder: 'assets/images/credit-card.png',
@@ -292,13 +287,13 @@ class _WalletScreenState extends State<WalletScreen> {
               cardData[index]['cardBrand'],
               style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  color: Color(AppColors.primaryText),
-                  fontSize: 16.5),
+                  color: Color(AppColors.secondaryColorDim),
+                  fontSize: 13),
             ),
             subtitle: Text(
               _formatCardNumber(cardData[index]['cardNumber']),
               style: TextStyle(
-                  fontSize: 13, color: Color(AppColors.secondaryText)),
+                  fontSize: 11, color: Color(AppColors.secondaryText)),
             ),
           ),
         ),

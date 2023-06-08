@@ -97,7 +97,7 @@ class _TabbedLayoutComponentState extends State<TabbedLayoutComponent> {
       onWillPop: _onBackPress,
       child: Scaffold(
         // backgroundColor: Colors.white,
-        backgroundColor: Color(AppColors.primaryBackground),
+        backgroundColor: Colors.transparent,
 
         extendBodyBehindAppBar: true,
 
@@ -155,23 +155,27 @@ class _TabbedLayoutComponentState extends State<TabbedLayoutComponent> {
             backgroundColor: Colors.transparent,
             tabs: [
               GButton(
-                icon: FluentIcons.home_32_regular,
+                icon: FluentIcons.wallet_20_regular,
                 iconSize: 24,
-                text: 'Home',
+                text: 'Wallet',
+                textStyle: TextStyle(
+                    height: 1.6,
+                    color: Color(AppColors.primaryColor),
+                    fontWeight: FontWeight.bold),
               ),
               // GButton(
-              //   icon: FluentIcons.people_32_regular,
+              //   icon: FluentIcons.people_20_regular,
               //   iconSize: 24,
               //   text: 'Contacts',
               // ),
               // GButton(
-              //   icon: FluentIcons.alert_32_regular,
+              //   icon: FluentIcons.alert_20_regular,
               //   iconActiveColor: Color(AppColors.secondaryText),
               //   text: 'Activities',
               //   leading: Stack(
               //     children: [
               //       Icon(
-              //         FluentIcons.alert_32_regular,
+              //         FluentIcons.alert_20_regular,
               //         color: _currentTab == 2
               //             ? Color(AppColors.primaryColor)
               //             : Color(AppColors.secondaryText),
@@ -201,9 +205,13 @@ class _TabbedLayoutComponentState extends State<TabbedLayoutComponent> {
               //   ),
               // ),
               GButton(
-                icon: quickpaisaIcons.line_awesome_wallet_solid,
-                text: 'Wallet',
+                icon: FluentIcons.person_20_regular,
+                text: 'Profile',
                 iconSize: 24,
+                textStyle: TextStyle(
+                    height: 1.6,
+                    color: Color(AppColors.primaryColor),
+                    fontWeight: FontWeight.bold),
               ),
             ],
             selectedIndex: _currentTab,

@@ -48,6 +48,9 @@ class _MyProductsScreenState extends State<MyProductsScreen>
   bool reload = false;
   Timer? _updateContactsSearchingHintTimer;
 
+  GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
+
   @override
   void initState() {
     super.initState();
@@ -228,6 +231,12 @@ class _MyProductsScreenState extends State<MyProductsScreen>
     }
   }
 
+  Future<void> _reload() {
+    return Future(() => setState(() {
+          reload = !reload;
+        }));
+  }
+
   void _deleteProductDialog(String id) {
     Decoration buttonDecoration = BoxDecoration(
       borderRadius: BorderRadius.circular(10),
@@ -325,102 +334,110 @@ class _MyProductsScreenState extends State<MyProductsScreen>
             child: Text('no matches found'),
           );
         } else {
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 28),
-            child: ListView.separated(
-                padding: EdgeInsets.all(0),
-                itemBuilder: (_, index) {
-                  Widget contactImage;
+          return RefreshIndicator(
+              key: _refreshIndicatorKey,
+              onRefresh: _reload,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 28),
+                child: ListView.separated(
+                    padding: EdgeInsets.all(0),
+                    itemBuilder: (_, index) {
+                      Widget contactImage;
 
-                  contactImage = Text(
-                    data[index]['title'][0].toUpperCase(),
-                    style: TextStyle(
-                        fontSize: 20, color: Color(AppColors.primaryColorDim)),
-                  );
+                      contactImage = Text(
+                        data[index]['title'][0].toUpperCase(),
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Color(AppColors.primaryColor)),
+                      );
 
-                  String tileBrand = '${data[index]['brand']['name']}';
-                  String tileAmount = 'Rs. ${data[index]['amount']}';
+                      String tileBrand = '${data[index]['brand']['name']}';
+                      String tileAmount = 'Rs. ${data[index]['amount']}';
 
-                  return Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color: Color(AppColors.shadowColor),
-                            blurRadius: 48,
-                            offset: Offset(2, 8),
-                            spreadRadius: -16),
-                      ],
-                      color: Color(AppColors.secondaryBackground),
-                    ),
-                    child: ListTile(
-                        contentPadding: EdgeInsets.all(0),
-                        leading: CircleAvatar(
-                          child: contactImage,
-                          backgroundColor: Color(AppColors.shadowColor),
-                          radius: 36.0,
+                      return Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: Color(AppColors.primaryColor)
+                                    .withOpacity(0.1),
+                                blurRadius: 48,
+                                offset: Offset(2, 8),
+                                spreadRadius: -16),
+                          ],
+                          color: Color(AppColors.secondaryBackground),
                         ),
-                        title: Text(
-                          data[index]['title'],
-                          style: TextStyle(
-                              fontSize: 13,
-                              color: Color(AppColors.secondaryColorDim)),
-                        ),
-                        onLongPress: () =>
-                            _deleteProductDialog("${data[index]['id']}"),
-                        subtitle: Container(
-                            margin: EdgeInsets.only(top: 7.2, right: 10),
-                            child: Flex(
-                              direction: Axis.horizontal,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  tileBrand,
-                                  style: TextStyle(
-                                      fontSize: 11,
-                                      color: Color(AppColors.secondaryText)),
-                                ),
-                                Text(
-                                  tileAmount,
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(AppColors.primaryColorDim)),
+                        child: ListTile(
+                            contentPadding: EdgeInsets.all(0),
+                            leading: CircleAvatar(
+                              child: contactImage,
+                              backgroundColor: Color(AppColors.shadowColor),
+                              radius: 36.0,
+                            ),
+                            title: Text(
+                              data[index]['title'],
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: Color(AppColors.secondaryColorDim)),
+                            ),
+                            onLongPress: () =>
+                                _deleteProductDialog("${data[index]['id']}"),
+                            subtitle: Container(
+                                margin: EdgeInsets.only(top: 7.2, right: 10),
+                                child: Flex(
+                                  direction: Axis.horizontal,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      tileBrand,
+                                      style: TextStyle(
+                                          fontSize: 11,
+                                          color:
+                                              Color(AppColors.secondaryText)),
+                                    ),
+                                    Text(
+                                      tileAmount,
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Color(AppColors.primaryColorDim)),
+                                    )
+                                  ],
+                                )),
+                            horizontalTitleGap: 18,
+                            onTap: () => Navigator.push(
+                                context,
+                                SlideRightRoute(
+                                    page: ProductQRCodeScreen(
+                                  product: data[index],
+                                ))
+                                // SlideRightRoute(
+                                //     page: FundTransferScreen(
+                                //   transactionType: 'debit',
+                                //   otherParty: {
+                                //     'type': "product",
+                                //     'title': data[index]['title'] ?? "",
+                                //     'amount': data[index]['amount'] ?? "0",
+                                //     'banner': data[index]['banner'] ?? "",
+                                //     'brandName': data[index]['brand']['name'] ?? "",
+                                //     'walletAddress':
+                                //         data[index]['walletAddress'] ?? "",
+                                //   },
+                                // ))
                                 )
-                              ],
-                            )),
-                        horizontalTitleGap: 18,
-                        onTap: () => Navigator.push(
-                            context,
-                            SlideRightRoute(
-                                page: ProductQRCodeScreen(
-                              product: data[index],
-                            ))
-                            // SlideRightRoute(
-                            //     page: FundTransferScreen(
-                            //   transactionType: 'debit',
-                            //   otherParty: {
-                            //     'type': "product",
-                            //     'title': data[index]['title'] ?? "",
-                            //     'amount': data[index]['amount'] ?? "0",
-                            //     'banner': data[index]['banner'] ?? "",
-                            //     'brandName': data[index]['brand']['name'] ?? "",
-                            //     'walletAddress':
-                            //         data[index]['walletAddress'] ?? "",
-                            //   },
-                            // ))
-                            )
-                        // _showInitiateTransactionDialogBox(data[index]),
+                            // _showInitiateTransactionDialogBox(data[index]),
+                            ),
+                      );
+                    },
+                    separatorBuilder: (_, b) => Divider(
+                          height: 14,
+                          color: Colors.transparent,
                         ),
-                  );
-                },
-                separatorBuilder: (_, b) => Divider(
-                      height: 14,
-                      color: Colors.transparent,
-                    ),
-                itemCount: data.length),
-          );
+                    itemCount: data.length),
+              ));
         }
       }
     } else if (snapshot.hasError) {

@@ -145,6 +145,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.4"
+  file_manager:
+    dependency: "direct main"
+    description:
+      name: file_manager
+      sha256: "72c3ec25614ca7a115995db5ca6a7fe84ab3e9b9280e7ab25ab50b9c892f437e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   fluentui_system_icons:
     dependency: "direct main"
     description:
@@ -264,6 +272,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.0"
+  intl:
+    dependency: "direct main"
+    description:
+      name: intl
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.18.1"
   js:
     dependency: transitive
     description:
@@ -336,6 +352,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  open_file_plus:
+    dependency: "direct main"
+    description:
+      name: open_file_plus
+      sha256: f087e32722ffe4bac71925e7a1a9848a1008fd789e47c6628da3ed7845922227
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.1"
   path:
     dependency: transitive
     description:
@@ -533,6 +557,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  slug_it:
+    dependency: "direct main"
+    description:
+      name: slug_it
+      sha256: "191fa19a2b1cbb7bdc6dacaa9796799bd41309d680e0249c853c63e96b3bf6e1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   socket_io_client:
     dependency: "direct main"
     description:

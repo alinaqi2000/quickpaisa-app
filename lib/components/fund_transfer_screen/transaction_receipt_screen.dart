@@ -112,7 +112,7 @@ class TransactionReceiptScreen extends StatelessWidget {
             transactionReceipt['transactionMemberName'][0].toUpperCase(),
             style: GoogleFonts.heebo(
               fontSize: 18,
-              color: Color(AppColors.secondaryColorDim),
+              color: Color(AppColors.primaryColorDim),
             ),
           );
         }
@@ -137,8 +137,20 @@ class TransactionReceiptScreen extends StatelessWidget {
                 ),
                 RepaintBoundary(
                   key: previewContainer,
-                  child: Padding(
+                  child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color:
+                                Color(AppColors.primaryColorDim).withOpacity(0.1),
+                            blurRadius: 48,
+                            offset: Offset(2, 8),
+                            spreadRadius: -16),
+                      ],
+                      color: Colors.transparent,
+                    ),
                     child: Stack(
                       alignment: Alignment.center,
                       clipBehavior: Clip.none,
@@ -372,7 +384,7 @@ class TransactionReceiptScreen extends StatelessWidget {
                                             Text(
                                               'Rs. ${transactionReceipt['transactionAmount']}',
                                               style: GoogleFonts.oswald(
-                                                  fontSize: 24,
+                                                  fontSize: 22,
                                                   color: transactionReceipt[
                                                               'transactionType'] ==
                                                           'debit'
@@ -389,7 +401,7 @@ class TransactionReceiptScreen extends StatelessWidget {
                                           spacing: 3.6,
                                           children: [
                                             Container(
-                                              padding: EdgeInsets.all(7.2),
+                                              padding: EdgeInsets.all(4),
                                               decoration: BoxDecoration(
                                                   border: Border.all(
                                                       color:
@@ -401,7 +413,7 @@ class TransactionReceiptScreen extends StatelessWidget {
                                                 'COMPLETED',
                                                 style: GoogleFonts.quicksand(
                                                     color: Colors.greenAccent,
-                                                    fontSize: 12.84),
+                                                    fontSize: 10),
                                               ),
                                             )
                                           ],
@@ -530,7 +542,7 @@ class TransactionReceiptScreen extends StatelessWidget {
                 Text(
                   'Credit/Debit Card',
                   style: GoogleFonts.roboto(
-                      fontSize: screenWidth < 400 ? 16 : 18,
+                      fontSize: screenWidth < 400 ? 14 : 16,
                       color: Color(AppColors.secondaryColorDim),
                       fontWeight: FontWeight.bold),
                 ),

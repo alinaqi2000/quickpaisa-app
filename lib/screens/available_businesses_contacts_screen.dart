@@ -288,15 +288,8 @@ class _AvailableBusinessesAndContactsScreenState
                                         BorderRadius.all(Radius.circular(20)),
                                     boxShadow: <BoxShadow>[
                                       BoxShadow(
-                                          /*
-                                          color: Color(AppColors.secondaryText),
-                                          blurRadius: 4,
-                                          offset: Offset(0.0, 3),
-                                          spreadRadius: 0
-                                          */
-                                          color:
-                                              Color(AppColors.primaryColorDim)
-                                                  .withOpacity(0.1),
+                                          color: Color(AppColors.primaryColor)
+                                              .withOpacity(0.1),
                                           blurRadius: 48,
                                           offset: Offset(2, 8),
                                           spreadRadius: -16),

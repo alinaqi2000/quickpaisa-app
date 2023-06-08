@@ -34,6 +34,8 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
   bool fetching = true;
   late List<Map<String, dynamic>> response;
   Map<String, dynamic>? error = null;
+  GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -50,14 +52,15 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
           padding: EdgeInsets.symmetric(horizontal: 6),
           child: CircleAvatar(
             backgroundColor: Color(AppColors.secondaryBackground),
-            radius: 26,
+            radius: 20,
             child: ClipOval(
               child: Image.network(
                 // "${ApiConstants.baseUrl}../storage/images/hadwin_images/hadwin_users/male/${widget.user['avatar']}",
                 "${widget.user['avatar']}",
-                height: 48,
-                width: 48,
-                fit: BoxFit.cover,
+                height: 34,
+                width: 34,
+                fit: BoxFit.contain,
+                // https://assets8.lottiefiles.com/packages/lf20_bevi1628.json
               ),
             ),
           ),
@@ -129,8 +132,18 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
       )
     ];
     List<Widget> transactionButtons = <Widget>[
-      Padding(
+      Container(
         padding: EdgeInsets.only(left: 10, top: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Color(AppColors.primaryColorDim).withOpacity(0.07),
+              blurRadius: 24,
+              offset: Offset(0, 0),
+            ),
+          ],
+        ),
         child: ElevatedButton(
             onPressed: () => {
                   Navigator.push(
@@ -140,13 +153,13 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 10,
+                  height: 6,
                 ),
                 Align(
                   alignment: Alignment.topLeft,
                   child: Icon(
                     Icons.qr_code_scanner_sharp,
-                    size: 24,
+                    size: 20,
                   ),
                 ),
                 Spacer(),
@@ -163,32 +176,42 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
               // primary: Color(AppColors.secondaryColor),
               primary: Color(AppColors.primaryColorDim),
               // fixedSize: Size(80, 100),
-              fixedSize: Size(80, 80),
+              fixedSize: Size(75, 75),
               shadowColor: Color(AppColors.secondaryColor).withOpacity(0.618),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             )),
       ),
-      Padding(
+      Container(
         padding: EdgeInsets.only(left: 10, top: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Color(AppColors.primaryColorDim).withOpacity(0.07),
+              blurRadius: 24,
+              offset: Offset(0, 0),
+            ),
+          ],
+        ),
         child: ElevatedButton(
             onPressed: () => _makeATransaction('debit'),
             child: Column(children: [
               SizedBox(
-                height: 10,
+                height: 6,
               ),
               Align(
                   alignment: Alignment.topLeft,
                   child: Icon(
                     Icons.send_rounded,
-                    size: 24,
+                    size: 20,
                     color: Color(AppColors.secondaryColor),
                   )),
               Spacer(),
               Text(
                 "Send Money",
                 style: TextStyle(
-                    color: Color(AppColors.secondaryText), fontSize: 11),
+                    color: Color(AppColors.secondaryText), fontSize: 10),
               ),
               SizedBox(
                 height: 10,
@@ -197,32 +220,42 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
             style: ElevatedButton.styleFrom(
               // fixedSize: Size(80, 100),
               backgroundColor: Color(AppColors.secondaryBackground),
-              fixedSize: Size(80, 80),
+              fixedSize: Size(75, 75),
               shadowColor: Color(AppColors.shadowColor).withOpacity(0.618),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             )),
       ),
-      Padding(
+      Container(
         padding: EdgeInsets.only(left: 10, top: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Color(AppColors.primaryColorDim).withOpacity(0.07),
+              blurRadius: 24,
+              offset: Offset(0, 0),
+            ),
+          ],
+        ),
         child: ElevatedButton(
             onPressed: () => _makeATransaction('credit'),
             child: Column(children: [
               SizedBox(
-                height: 10,
+                height: 6,
               ),
               Align(
                   alignment: Alignment.topLeft,
                   child: Icon(
                     Icons.receipt,
-                    size: 24,
+                    size: 20,
                     color: Color(AppColors.secondaryColor),
                   )),
               Spacer(),
               Text(
                 "Request Money",
                 style: TextStyle(
-                    color: Color(AppColors.secondaryText), fontSize: 11),
+                    color: Color(AppColors.secondaryText), fontSize: 10),
               ),
               SizedBox(
                 height: 10,
@@ -231,12 +264,162 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
             style: ElevatedButton.styleFrom(
               // fixedSize: Size(80, 100),
               backgroundColor: Color(AppColors.secondaryBackground),
-              fixedSize: Size(80, 80),
+              fixedSize: Size(75, 75),
               shadowColor: Color(AppColors.shadowColor).withOpacity(0.618),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             )),
       ),
+
+      Container(
+        padding: EdgeInsets.only(left: 10, top: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Color(AppColors.primaryColorDim).withOpacity(0.07),
+              blurRadius: 24,
+              offset: Offset(0, 0),
+            ),
+          ],
+        ),
+        child: ElevatedButton(
+            onPressed: () => Navigator.push(
+                    context,
+                    SlideRightRoute(
+                        page: AllContactsScreen(
+                            userAuthKey: widget.userAuthKey ?? "")))
+                .whenComplete(() => setState(() {})),
+            child: Column(children: [
+              SizedBox(
+                height: 6,
+              ),
+              Align(
+                  alignment: Alignment.topLeft,
+                  child: Icon(
+                    Icons.contact_page,
+                    size: 20,
+                    color: Color(AppColors.secondaryColor),
+                  )),
+              Spacer(),
+              Text(
+                "My Contacts",
+                style: TextStyle(
+                    color: Color(AppColors.secondaryText), fontSize: 10),
+              ),
+              SizedBox(
+                height: 10,
+              )
+            ]),
+            style: ElevatedButton.styleFrom(
+              // fixedSize: Size(80, 100),
+              backgroundColor: Color(AppColors.secondaryBackground),
+              fixedSize: Size(75, 75),
+              shadowColor: Color(AppColors.shadowColor).withOpacity(0.618),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+            )),
+      ),
+
+      Container(
+        padding: EdgeInsets.only(left: 10, top: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Color(AppColors.primaryColorDim).withOpacity(0.07),
+              blurRadius: 24,
+              offset: Offset(0, 0),
+            ),
+          ],
+        ),
+        child: ElevatedButton(
+            onPressed: () => Navigator.push(
+                context,
+                SlideRightRoute(
+                    page: AllBrandsScreen(
+                        userAuthKey: widget.userAuthKey ?? ""))),
+            child: Column(children: [
+              SizedBox(
+                height: 6,
+              ),
+              Align(
+                  alignment: Alignment.topLeft,
+                  child: Icon(
+                    Icons.bar_chart_rounded,
+                    size: 20,
+                    color: Color(AppColors.secondaryColor),
+                  )),
+              Spacer(),
+              Text(
+                "My Brands",
+                style: TextStyle(
+                    color: Color(AppColors.secondaryText), fontSize: 10),
+              ),
+              SizedBox(
+                height: 10,
+              )
+            ]),
+            style: ElevatedButton.styleFrom(
+              // fixedSize: Size(80, 100),
+              backgroundColor: Color(AppColors.secondaryBackground),
+              fixedSize: Size(75, 75),
+              shadowColor: Color(AppColors.shadowColor).withOpacity(0.618),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+            )),
+      ),
+
+      Container(
+        padding: EdgeInsets.only(left: 10, top: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Color(AppColors.primaryColorDim).withOpacity(0.07),
+              blurRadius: 24,
+              offset: Offset(0, 0),
+            ),
+          ],
+        ),
+        child: ElevatedButton(
+            onPressed: () => Navigator.push(
+                    context,
+                    SlideRightRoute(
+                        page: MyProductsScreen(
+                            userAuthKey: widget.userAuthKey ?? "")))
+                .whenComplete(() => setState(() {})),
+            child: Column(children: [
+              SizedBox(
+                height: 6,
+              ),
+              Align(
+                  alignment: Alignment.topLeft,
+                  child: Icon(
+                    Icons.shopping_bag,
+                    size: 20,
+                    color: Color(AppColors.secondaryColor),
+                  )),
+              Spacer(),
+              Text(
+                "My Products",
+                style: TextStyle(
+                    color: Color(AppColors.secondaryText), fontSize: 10),
+              ),
+              SizedBox(
+                height: 10,
+              )
+            ]),
+            style: ElevatedButton.styleFrom(
+              // fixedSize: Size(80, 100),
+              backgroundColor: Color(AppColors.secondaryBackground),
+              fixedSize: Size(75, 75),
+              shadowColor: Color(AppColors.shadowColor).withOpacity(0.618),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+            )),
+      ),
+
       // Padding(
       //   padding: EdgeInsets.all(10),
       //   child: ElevatedButton(
@@ -260,7 +443,7 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
       //         Text(
       //           "My Contacts",
       //           style: TextStyle(
-      //               color: Color(AppColors.secondaryText), fontSize: 11),
+      //               color: Color(AppColors.secondaryText), fontSize: 10),
       //         ),
       //         SizedBox(
       //           height: 10,
@@ -269,67 +452,67 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
       //       style: ElevatedButton.styleFrom(
       //         // fixedSize: Size(80, 100),
       //         backgroundColor: Color(AppColors.secondaryBackground),
-      //         fixedSize: Size(80, 80),
+      //         fixedSize: Size(75, 75),
       //         shadowColor: Color(AppColors.shadowColor).withOpacity(0.618),
       //         shape: RoundedRectangleBorder(
       //             borderRadius: BorderRadius.circular(12)),
       //       )),
       // ),
-      PopupMenuButton<_ScanOptions>(
-        icon: Icon(
-          FluentIcons.more_vertical_28_regular,
-          color: Color(AppColors.secondaryText),
-        ),
-        offset: Offset(119, -27),
-        onSelected: (value) {
-          if (value == _ScanOptions.MyContacts) {
-            Navigator.push(
-                    context,
-                    SlideRightRoute(
-                        page: AllContactsScreen(
-                            userAuthKey: widget.userAuthKey ?? "")))
-                .whenComplete(() => setState(() {}));
-          }
-          if (value == _ScanOptions.MyBrands) {
-            Navigator.push(
-                    context,
-                    SlideRightRoute(
-                        page: AllBrandsScreen(
-                            userAuthKey: widget.userAuthKey ?? "")))
-                .whenComplete(() => setState(() {}));
-          }
-          if (value == _ScanOptions.MyProducts) {
-            Navigator.push(
-                context,
-                SlideRightRoute(
-                    page: MyProductsScreen(
-                        userAuthKey: widget.userAuthKey ?? "")));
-            //       .whenComplete(() => setState(() {}));
-          }
-          // else {
-          //   Navigator.push(context, SlideRightRoute(page: MyProductsScreen()))
-          //       .whenComplete(() => setState(() {}));
-          // }
-        },
-        itemBuilder: (context) => [
-          PopupMenuItem(
-            child: Text("My Brands"),
-            value: _ScanOptions.MyBrands,
-          ),
-          PopupMenuItem(
-            child: Text("My Products"),
-            value: _ScanOptions.MyProducts,
-          ),
-          PopupMenuItem(
-            child: Text("My Contacts"),
-            value: _ScanOptions.MyContacts,
-          ),
-          // PopupMenuItem(
-          //   child: Text("My QR Code"),
-          //   value: _ScanOptions.MyProducts,
-          // )
-        ],
-      )
+      // PopupMenuButton<_ScanOptions>(
+      //   icon: Icon(
+      //     FluentIcons.more_vertical_28_regular,
+      //     color: Color(AppColors.secondaryText),
+      //   ),
+      //   offset: Offset(119, -27),
+      //   onSelected: (value) {
+      //     if (value == _ScanOptions.MyContacts) {
+      //       Navigator.push(
+      //               context,
+      //               SlideRightRoute(
+      //                   page: AllContactsScreen(
+      //                       userAuthKey: widget.userAuthKey ?? "")))
+      //           .whenComplete(() => setState(() {}));
+      //     }
+      //     if (value == _ScanOptions.MyBrands) {
+      //       Navigator.push(
+      //               context,
+      //               SlideRightRoute(
+      //                   page: AllBrandsScreen(
+      //                       userAuthKey: widget.userAuthKey ?? "")))
+      //           .whenComplete(() => setState(() {}));
+      //     }
+      //     if (value == _ScanOptions.MyProducts) {
+      //       Navigator.push(
+      //           context,
+      //           SlideRightRoute(
+      //               page: MyProductsScreen(
+      //                   userAuthKey: widget.userAuthKey ?? "")));
+      //       //       .whenComplete(() => setState(() {}));
+      //     }
+      //     // else {
+      //     //   Navigator.push(context, SlideRightRoute(page: MyProductsScreen()))
+      //     //       .whenComplete(() => setState(() {}));
+      //     // }
+      //   },
+      //   itemBuilder: (context) => [
+      //     PopupMenuItem(
+      //       child: Text("My Brands"),
+      //       value: _ScanOptions.MyBrands,
+      //     ),
+      //     PopupMenuItem(
+      //       child: Text("My Products"),
+      //       value: _ScanOptions.MyProducts,
+      //     ),
+      //     PopupMenuItem(
+      //       child: Text("My Contacts"),
+      //       value: _ScanOptions.MyContacts,
+      //     ),
+      //     // PopupMenuItem(
+      //     //   child: Text("My QR Code"),
+      //     //   value: _ScanOptions.MyProducts,
+      //     // )
+      //   ],
+      // )
     ];
 
     List<Widget> homeScreenContents = <Widget>[
@@ -338,14 +521,10 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
       ),
       Container(
         padding: EdgeInsets.all(10),
-        child: Align(
-          alignment: Alignment.topLeft,
-          child: Wrap(
-            direction: Axis.horizontal,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: 1,
-            children: transactionButtons,
-          ),
+        height: 200,
+        child: Wrap(
+          // scrollDirection: Axis.horizontal,
+          children: transactionButtons,
         ),
       ),
       Expanded(
@@ -356,20 +535,20 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                     child: Row(
                       children: [
                         Text(
                           "Activity",
                           style: TextStyle(
-                              fontSize: 21,
-                              color: Color(AppColors.primaryText)),
+                              fontSize: 14,
+                              color: Color(AppColors.secondaryText)),
                         ),
                         Spacer(),
                         InkWell(
                           child: Text("View all",
                               style:
-                                  TextStyle(fontSize: 16, color: Colors.grey)),
+                                  TextStyle(fontSize: 12, color: Colors.grey)),
                           onTap: _viewAllActivities,
                         )
                       ],
@@ -398,7 +577,7 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
         extendBodyBehindAppBar: true,
         body: CustomScrollView(slivers: [
           SliverFillRemaining(
-              hasScrollBody: false,
+              hasScrollBody: true,
               child: Column(
                 children: homeScreenContents,
               ))
@@ -430,165 +609,173 @@ class HomeDashboardScreenState extends State<HomeDashboardScreen> {
       }
       List<dynamic> currentTransactions = List.from(allTransactions)
           .sublist(0, allTransactions.length < 4 ? allTransactions.length : 4);
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15),
-        child: ListView.separated(
-          padding: EdgeInsets.all(0),
-          separatorBuilder: (_, b) => Divider(
-            height: 14,
-            color: Colors.transparent,
-          ),
-          itemCount: currentTransactions.length,
-          itemBuilder: (BuildContext context, int index) {
-            Widget transactionMemberImage = FutureBuilder<int>(
-              future: checkUrlValidity(
-                  "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${currentTransactions[index]['transactionMemberAvatar']}"),
-              builder: (context, snapshot) {
-                if (currentTransactions[index]
-                        .containsKey('transactionMemberBusinessWebsite') &&
-                    currentTransactions[index]
-                        .containsKey('transactionMemberAvatar')) {
-                  return ClipOval(
-                    child: AspectRatio(
-                      aspectRatio: 1.0 / 1.0,
-                      child: ColorFiltered(
-                        colorFilter: ColorFilter.mode(
-                          Color(AppColors.secondaryColorDim),
-                          BlendMode.color,
-                        ),
-                        child: ColorFiltered(
-                          colorFilter: ColorFilter.mode(
-                            Colors.grey,
-                            BlendMode.saturation,
-                          ),
-                          child: Image.network(
-                            currentTransactions[index]
-                                        ['transactionMemberAvatar']
-                                    .toString()
-                                    .contains("http")
-                                ? "${currentTransactions[index]['transactionMemberAvatar']}"
-                                : "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${currentTransactions[index]['transactionMemberAvatar']}",
-                            height: 72,
-                            width: 72,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                } else if (currentTransactions[index]
-                        .containsKey('transactionMemberEmail') &&
-                    currentTransactions[index]
-                        .containsKey('transactionMemberAvatar') &&
-                    snapshot.hasData) {
-                  if (snapshot.data == 404) {
-                    return ClipOval(
-                      child: AspectRatio(
-                        aspectRatio: 1.0 / 1.0,
-                        child: Image.network(
-                          "${ApiConstants.baseUrl}../storage/images/hadwin_images/hadwin_users/${currentTransactions[index]['transactionMemberGender'].toLowerCase()}/${currentTransactions[index]['transactionMemberAvatar']}",
-                          height: 72,
-                          width: 72,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    );
-                  } else {
-                    return ClipOval(
-                      child: AspectRatio(
-                        aspectRatio: 1.0 / 1.0,
-                        child: Image.network(
-                          currentTransactions[index]['transactionMemberAvatar']
-                                  .toString()
-                                  .contains("http")
-                              ? "${currentTransactions[index]['transactionMemberAvatar']}"
-                              : "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${currentTransactions[index]['transactionMemberAvatar']}",
-                          height: 72,
-                          width: 72,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    );
-                  }
-                } else {
-                  return Text(
-                    currentTransactions[index]['transactionMemberName'][0]
-                        .toUpperCase(),
-                    style: TextStyle(
-                        fontSize: 20, color: Color(AppColors.primaryColorDim)),
-                  );
-                }
-              },
-            );
 
-            return Container(
-              padding: EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                      /*
-                    color: Color(AppColors.shadowColor),
-                    blurRadius: 4,
-                    offset: Offset(0.0, 3),
-                    spreadRadius: 0
-                 */
-                      color: Color(AppColors.primaryColor).withOpacity(0.1),
-                      blurRadius: 48,
-                      offset: Offset(2, 8),
-                      spreadRadius: -16),
-                ],
-                color: Color(AppColors.secondaryBackground),
+      return RefreshIndicator(
+          key: _refreshIndicatorKey,
+          onRefresh: fetchTransactions,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: ListView.separated(
+              padding: EdgeInsets.all(0),
+              separatorBuilder: (_, b) => Divider(
+                height: 14,
+                color: Colors.transparent,
               ),
-              child: ListTile(
-                contentPadding:
-                    EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 6.18),
-                leading: CircleAvatar(
-                    radius: 38,
-                    backgroundColor: Color(AppColors.shadowColor),
-                    child: transactionMemberImage),
-                title: Text(
-                  currentTransactions[index]['transactionMemberName'],
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Color(AppColors.secondaryColorDim)),
-                ),
-                subtitle: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child: Text(
-                    dateFormatter(
-                        currentTransactions[index]['dateGroup'],
-                        DateTime.parse(
-                            currentTransactions[index]['transactionDate'])),
-                    style: TextStyle(
-                        fontSize: 10, color: Color(AppColors.secondaryText)),
+              itemCount: currentTransactions.length,
+              itemBuilder: (BuildContext context, int index) {
+                Widget transactionMemberImage = FutureBuilder<int>(
+                  future: checkUrlValidity(
+                      "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${currentTransactions[index]['transactionMemberAvatar']}"),
+                  builder: (context, snapshot) {
+                    if (currentTransactions[index]
+                            .containsKey('transactionMemberBusinessWebsite') &&
+                        currentTransactions[index]
+                            .containsKey('transactionMemberAvatar')) {
+                      return ClipOval(
+                        child: AspectRatio(
+                          aspectRatio: 1.0 / 1.0,
+                          child: ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                              Color(AppColors.secondaryColorDim),
+                              BlendMode.color,
+                            ),
+                            child: ColorFiltered(
+                              colorFilter: ColorFilter.mode(
+                                Colors.grey,
+                                BlendMode.saturation,
+                              ),
+                              child: Image.network(
+                                currentTransactions[index]
+                                            ['transactionMemberAvatar']
+                                        .toString()
+                                        .contains("http")
+                                    ? "${currentTransactions[index]['transactionMemberAvatar']}"
+                                    : "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${currentTransactions[index]['transactionMemberAvatar']}",
+                                height: 72,
+                                width: 72,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    } else if (currentTransactions[index]
+                            .containsKey('transactionMemberEmail') &&
+                        currentTransactions[index]
+                            .containsKey('transactionMemberAvatar') &&
+                        snapshot.hasData) {
+                      if (snapshot.data == 404) {
+                        return ClipOval(
+                          child: AspectRatio(
+                            aspectRatio: 1.0 / 1.0,
+                            child: Image.network(
+                              "${ApiConstants.baseUrl}../storage/images/hadwin_images/hadwin_users/${currentTransactions[index]['transactionMemberGender'].toLowerCase()}/${currentTransactions[index]['transactionMemberAvatar']}",
+                              height: 72,
+                              width: 72,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        );
+                      } else {
+                        return ClipOval(
+                          child: AspectRatio(
+                            aspectRatio: 1.0 / 1.0,
+                            child: Image.network(
+                              currentTransactions[index]
+                                          ['transactionMemberAvatar']
+                                      .toString()
+                                      .contains("http")
+                                  ? "${currentTransactions[index]['transactionMemberAvatar']}"
+                                  : "${ApiConstants.baseUrl}../storage/images/hadwin_images/brands_and_businesses/${currentTransactions[index]['transactionMemberAvatar']}",
+                              height: 72,
+                              width: 72,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        );
+                      }
+                    } else {
+                      return Text(
+                        currentTransactions[index]['transactionMemberName'][0]
+                            .toUpperCase(),
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Color(AppColors.primaryColorDim)),
+                      );
+                    }
+                  },
+                );
+
+                return Container(
+                  padding: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: Color(AppColors.primaryColor).withOpacity(0.1),
+                          blurRadius: 48,
+                          offset: Offset(2, 8),
+                          spreadRadius: -16),
+                    ],
+                    color: Color(AppColors.secondaryBackground),
                   ),
-                ),
-                trailing: Padding(
-                    padding: EdgeInsets.only(right: 2),
-                    child: Text(
-                      currentTransactions[index]['transactionType'] == "credit"
-                          ? "+ Rs. ${currentTransactions[index]['transactionAmount'].toString()}"
-                          : "- Rs. ${currentTransactions[index]['transactionAmount'].toString()}",
+                  child: ListTile(
+                    contentPadding: EdgeInsets.only(
+                        left: 0, top: 0, bottom: 0, right: 6.18),
+                    leading: CircleAvatar(
+                        radius: 38,
+                        backgroundColor: Color(AppColors.shadowColor),
+                        child: transactionMemberImage),
+                    title: Text(
+                      currentTransactions[index]['transactionMemberName'],
                       style: TextStyle(
                           fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: currentTransactions[index]
-                                      ['transactionType'] ==
+                          fontWeight: FontWeight.bold,
+                          color: Color(AppColors.secondaryColorDim)),
+                    ),
+                    subtitle: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        dateFormatter(
+                            currentTransactions[index]['dateGroup'],
+                            DateTime.parse(
+                                currentTransactions[index]['transactionDate'])),
+                        style: TextStyle(
+                            fontSize: 10,
+                            color: Color(AppColors.secondaryText)),
+                      ),
+                    ),
+                    trailing: Padding(
+                        padding: EdgeInsets.only(right: 2),
+                        child: Text(
+                          currentTransactions[index]['transactionType'] ==
                                   "credit"
-                              ? Colors.greenAccent
-                              : Colors.redAccent),
-                    )),
-                onTap: _viewAllActivities,
-              ),
-            );
-          },
-        ),
-      );
+                              ? "+ Rs. ${currentTransactions[index]['transactionAmount'].toString()}"
+                              : "- Rs. ${currentTransactions[index]['transactionAmount'].toString()}",
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: currentTransactions[index]
+                                          ['transactionType'] ==
+                                      "credit"
+                                  ? Colors.greenAccent
+                                  : Colors.redAccent),
+                        )),
+                    onTap: _viewAllActivities,
+                  ),
+                );
+              },
+            ),
+          ));
     } else {
       return activitiesLoadingList(4);
     }
+  }
+
+  Future<void> fetchTransactions() {
+// Imagine that this function is fetching user info but encounters a bug
+    return Future.delayed(
+        const Duration(microseconds: 2), () => getTransactionsFromApi());
   }
 
   void goToWalletScreen() {
