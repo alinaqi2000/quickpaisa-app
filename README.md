@@ -50,20 +50,17 @@ flutter pub get
 The following GIFs showcase the functionality and user experience of QuickPaisa:
 
 1. **Send Money:**
-
-![Send Money](https://i.postimg.cc/j5JwsfkM/send-money.gif)
+<img src="https://imageupload.io/ib/nKkJuPCbTqTBqCN_1687276052.gif"  width="200px">
 
 2. **Add Product:**
-
-![Add Product](https://i.postimg.cc/8PhrxLq4/add-product.gif)
+<img src="https://imageupload.io/ib/VQYqewLMNaKbTZ6_1687276088.gif"  width="200px">
 
 3. **Generate PDF:**
-
-![Generate PDF](https://i.postimg.cc/SRDDGWQy/generate-pdf.gif)
+<img src="https://imageupload.io/ib/GdE6VhnZ4nUADxn_1687275956.gif"  width="200px">
 
 4. **See Transactions:**
-
-![See Transactions](https://i.postimg.cc/C1Cvz3Wn/see-transactions.gif)
+<img src="https://imageupload.io/ib/fJPMrPXYqHjaWrK_1687276039.gif"  width="200px">
 
 ## License
 QuickPaisa is released under the MIT License.
+
