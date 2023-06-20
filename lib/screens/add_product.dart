@@ -378,6 +378,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     errorMessageSetter(2, 'amount cannot be empty');
+                  } else if (double.parse(value) > 10000) {
+                    errorMessageSetter(2, 'must not be greater than 10000');
                   } else {
                     errorMessageSetter(2, "");
                     setState(() {

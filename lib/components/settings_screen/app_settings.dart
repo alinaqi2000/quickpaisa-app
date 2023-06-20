@@ -75,27 +75,27 @@ class AppSettingsComponent extends StatelessWidget {
         },
         'settingsCategory': 'About the app',
       },
-      {
-        'title': Text('Privacy Policy'),
-        'trailing': Icon(FluentIcons.info_24_regular),
-        'onTap': () =>
-            openDocsViewer('PRIVACY_POLICY', 'Privacy Policy', context),
-        'settingsCategory': 'About the app',
-      },
-      {
-        'title': Text('Terms of use'),
-        'trailing': Icon(FluentIcons.info_24_regular),
-        'onTap': () => openDocsViewer(
-            'TERMS_AND_CONDITIONS', 'Terms & Conditions', context),
-        'settingsCategory': 'About the app',
-      },
-      {
-        'title': Text('End User License Agreement'),
-        'trailing': Icon(FluentIcons.info_24_regular),
-        'onTap': () => openDocsViewer('END_USER_LICENSE_AGREEMENT',
-            'End User License Agreement', context),
-        'settingsCategory': 'About the app',
-      },
+      // {
+      //   'title': Text('Privacy Policy'),
+      //   'trailing': Icon(FluentIcons.info_24_regular),
+      //   'onTap': () =>
+      //       openDocsViewer('PRIVACY_POLICY', 'Privacy Policy', context),
+      //   'settingsCategory': 'About the app',
+      // },
+      // {
+      //   'title': Text('Terms of use'),
+      //   'trailing': Icon(FluentIcons.info_24_regular),
+      //   'onTap': () => openDocsViewer(
+      //       'TERMS_AND_CONDITIONS', 'Terms & Conditions', context),
+      //   'settingsCategory': 'About the app',
+      // },
+      // {
+      //   'title': Text('End User License Agreement'),
+      //   'trailing': Icon(FluentIcons.info_24_regular),
+      //   'onTap': () => openDocsViewer('END_USER_LICENSE_AGREEMENT',
+      //       'End User License Agreement', context),
+      //   'settingsCategory': 'About the app',
+      // },
       {
         'title': Text('Sign Out'),
         'trailing': Icon(FluentIcons.sign_out_24_regular),

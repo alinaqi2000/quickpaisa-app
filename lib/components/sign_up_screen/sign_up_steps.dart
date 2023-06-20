@@ -145,61 +145,61 @@ class _SignUpStepsState extends State<SignUpSteps> {
                 children: signUpStepContent,
               ),
             ),
-            if (_currentStep == 2)
-              Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 3.6, horizontal: 10),
-                  child: RichText(
-                      text: TextSpan(
-                          text: 'By signing up you are agreeing to the ',
-                          style:
-                              TextStyle(fontSize: 14, color: Color(0xFF929BAB)),
-                          children: <InlineSpan>[
-                        TextSpan(
-                            text: 'Terms & Conditions',
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Color(AppColors.secondaryColorDim)),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                Future.delayed(
-                                    Duration(milliseconds: 300),
-                                    () => Navigator.push(
-                                        context,
-                                        SlideRightRoute(
-                                            page: quickpaisaMarkdownViewer(
-                                          screenName: "Terms & Conditons",
-                                          urlRequested:
-                                              'https://raw.githubusercontent.com/brownboycodes/quickpaisa/master/docs/TERMS_AND_CONDITIONS.md',
-                                        ))));
-                              }),
-                        TextSpan(
-                          text: ' and our ',
-                          style:
-                              TextStyle(fontSize: 14, color: Color(0xFF929BAB)),
-                        ),
-                        TextSpan(
-                            text: 'End User License Agreement',
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Color(AppColors.secondaryColorDim)),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                Future.delayed(
-                                    Duration(milliseconds: 300),
-                                    () => Navigator.push(
-                                        context,
-                                        SlideRightRoute(
-                                            page: quickpaisaMarkdownViewer(
-                                          screenName:
-                                              "End User License Agreement",
-                                          urlRequested:
-                                              'https://raw.githubusercontent.com/brownboycodes/quickpaisa/master/docs/END_USER_LICENSE_AGREEMENT.md',
-                                        ))));
-                              })
-                      ]))),
+            // if (_currentStep == 2)
+            //   Padding(
+            //       padding:
+            //           const EdgeInsets.symmetric(vertical: 3.6, horizontal: 10),
+            //       child: RichText(
+            //           text: TextSpan(
+            //               text: 'By signing up you are agreeing to the ',
+            //               style:
+            //                   TextStyle(fontSize: 14, color: Color(0xFF929BAB)),
+            //               children: <InlineSpan>[
+            //             TextSpan(
+            //                 text: 'Terms & Conditions',
+            //                 style: TextStyle(
+            //                     fontSize: 14,
+            //                     color: Color(AppColors.secondaryColorDim)),
+            //                 recognizer: TapGestureRecognizer()
+            //                   ..onTap = () {
+            //                     FocusManager.instance.primaryFocus?.unfocus();
+            //                     Future.delayed(
+            //                         Duration(milliseconds: 300),
+            //                         () => Navigator.push(
+            //                             context,
+            //                             SlideRightRoute(
+            //                                 page: quickpaisaMarkdownViewer(
+            //                               screenName: "Terms & Conditons",
+            //                               urlRequested:
+            //                                   'https://raw.githubusercontent.com/brownboycodes/quickpaisa/master/docs/TERMS_AND_CONDITIONS.md',
+            //                             ))));
+            //                   }),
+            //             TextSpan(
+            //               text: ' and our ',
+            //               style:
+            //                   TextStyle(fontSize: 14, color: Color(0xFF929BAB)),
+            //             ),
+            //             TextSpan(
+            //                 text: 'End User License Agreement',
+            //                 style: TextStyle(
+            //                     fontSize: 14,
+            //                     color: Color(AppColors.secondaryColorDim)),
+            //                 recognizer: TapGestureRecognizer()
+            //                   ..onTap = () {
+            //                     FocusManager.instance.primaryFocus?.unfocus();
+            //                     Future.delayed(
+            //                         Duration(milliseconds: 300),
+            //                         () => Navigator.push(
+            //                             context,
+            //                             SlideRightRoute(
+            //                                 page: quickpaisaMarkdownViewer(
+            //                               screenName:
+            //                                   "End User License Agreement",
+            //                               urlRequested:
+            //                                   'https://raw.githubusercontent.com/brownboycodes/quickpaisa/master/docs/END_USER_LICENSE_AGREEMENT.md',
+            //                             ))));
+            //                   })
+            //           ]))),
             confirmSignUpButton
                 ? Container(
                     margin: const EdgeInsets.symmetric(vertical: 16.0),
