@@ -1,6 +1,6 @@
 # QuickPaisa - QR Payment App
 
-![QuickPaisa Logo](https://i.postimg.cc/vHhyr6wD/quickpaisa-logo-with-name.png)
+![QuickPaisa Logo](https://imageupload.io/ib/gMzjA6HXazPgVXg_1687276539.png)
 
 ## Introduction
 
